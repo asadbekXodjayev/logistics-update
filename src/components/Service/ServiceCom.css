@@ -40,7 +40,7 @@
 .svc-hero {
     position: relative;
     width: 100%;
-    min-height: 55vh;
+    min-height: var(--hero-height);
     background: var(--color-dark);
     border-left: 5px solid var(--color-primary);
     display: flex;
@@ -141,14 +141,8 @@
     grid-template-columns: 1fr 1fr;
     gap: clamp(30px, 5vw, 70px);
     align-items: center;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.svc-row.is-visible {
-    opacity: 1;
-    transform: translateY(0);
+    /* Reveal animation is handled by framer-motion (<Reveal>); the row is
+       visible by default so reduced-motion users always see it. */
 }
 
 .svc-row--reverse .svc-row__media {
@@ -519,14 +513,6 @@
 }
 
 @media (max-width: 768px) {
-    .svc-hero {
-        min-height: 30vh;
-    }
-
-    .svc-hero__subtitle {
-        display: none;
-    }
-
     .svc-hero__inner {
         padding: 60px 16px;
     }

@@ -2,25 +2,24 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './FooterCom.css';
 import Logo from '/public/logo-white.svg';
+import { useTrackModal } from '../TrackModal/TrackModalContext.jsx';
+import { TRAILERS } from '../../lib/trailers';
 
 const pages = [
     { to: '/about', label: 'About Us' },
     { to: '/apply', label: 'Apply Now' },
     { to: '/trucks', label: 'Trucks' },
     { to: '/services', label: 'Services' },
+    { to: '/quote', label: 'Request a Quote' },
     { to: '/contact', label: 'Contact' },
     { to: '/privacy', label: 'Privacy' },
 ];
 
-const services = [
-    { to: '/services', label: 'Turnkey Services' },
-    { to: '/services', label: 'Fleet Services' },
-    { to: '/services', label: 'Accounting Services' },
-    { to: '/services', label: 'Safety Services' },
-    { to: '/services', label: 'Dispatch' },
-];
+const services = TRAILERS.map((t) => ({ to: '/services', label: t.name }));
 
 const Footer = () => {
+    const { openTrack } = useTrackModal();
+
     return (
         <footer className="footer">
             {/* ── Gold top accent bar ───────────────────── */}
@@ -80,7 +79,7 @@ const Footer = () => {
                 <div className="footer__col">
                     <h3 className="footer__col-heading">
                         <span className="footer__col-heading-bar" />
-                        Services
+                        Trailers
                     </h3>
                     <ul className="footer__link-list">
                         {services.map(({ to, label }) => (
@@ -103,7 +102,7 @@ const Footer = () => {
                     <p className="footer__cta-desc">
                         Get a free freight quote today — our team responds within 24 hours.
                     </p>
-                    <Link to="/contact" className="footer__cta-btn">
+                    <Link to="/quote" className="footer__cta-btn">
                         Get a Free Quote
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" strokeWidth="2.5"
@@ -111,6 +110,15 @@ const Footer = () => {
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
                     </Link>
+                    <button type="button" onClick={openTrack} className="footer__track-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" strokeWidth="2.2"
+                            strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 7v5l3 2" />
+                        </svg>
+                        Track Shipment
+                    </button>
                     <Link to="/apply" className="footer__apply-btn">
                         Driver Apply Now
                     </Link>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import './AboutCom.css';
+import PageHero from '../PageHero/PageHero.jsx';
 import Image1 from '../../../public/photo_2024-11-11_18-31-04.webp';
 import Image2 from '../../../public/IMG_4627.webp';
 import Image3 from '../../../public/photo_2024-11-12_11-57-03.webp';
@@ -70,20 +71,11 @@ const AboutCom = () => {
     return (
         <div className="about-page">
             {/* Page Hero Banner */}
-            <div className="about-hero">
-                <div className="about-hero__overlay" />
-                <div className="about-hero__content">
-                    <span className="about-hero__label">
-                        <span className="about-hero__label-line" />
-                        Our Story
-                    </span>
-                    <h1 className="about-hero__title">
-                        Built on <span className="about-hero__accent">Trust</span>,<br />
-                        Driven by Results.
-                    </h1>
-                </div>
-                <div className="about-hero__diagonal" />
-            </div>
+            <PageHero
+                eyebrow="Our Story"
+                title={<>Built on <em>Trust</em>, Driven by Results.</>}
+                subtitle="A powerful American carrier moving freight across all 48 states — with the equipment, people, and reliability your business runs on."
+            />
 
             {/* Content Sections */}
             <div className="about-sections">

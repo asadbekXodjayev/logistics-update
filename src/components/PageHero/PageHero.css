@@ -1,0 +1,95 @@
+/* ============================================================
+   Shared secondary-page hero (Trucks / Services / About / Contact)
+   ============================================================ */
+.ph-hero {
+    position: relative;
+    width: 100%;
+    min-height: var(--hero-height);
+    background: var(--color-dark);
+    border-left: 5px solid var(--color-primary);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.ph-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg,
+            rgba(0, 10, 25, 0.97) 0%,
+            rgba(0, 31, 63, 0.75) 100%);
+    z-index: 1;
+}
+
+.ph-hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: clamp(40px, 8vw, 100px) clamp(20px, 6vw, 60px);
+}
+
+.ph-hero__label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--color-primary);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 18px;
+}
+
+.ph-hero__line {
+    width: 28px;
+    height: 2px;
+    background: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.ph-hero__title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    line-height: 1;
+    color: var(--color-white);
+    text-transform: uppercase;
+    margin: 0 0 22px;
+}
+
+.ph-hero__title em {
+    color: var(--color-primary);
+    font-style: italic;
+}
+
+.ph-hero__sub {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    max-width: 620px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.ph-hero__cut {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 55px;
+    background: var(--color-white);
+    clip-path: polygon(0 60%, 100% 0, 100% 100%, 0 100%);
+    z-index: 2;
+}
+
+@media (max-width: 768px) {
+    .ph-hero__inner {
+        padding: 70px 20px;
+    }
+
+    .ph-hero__cut {
+        height: 40px;
+    }
+}

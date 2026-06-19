@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useBlog } from '../../Context';
 import './JobCom.css';
 import { Link } from 'react-router-dom';
+import { sendTelegramMessage, sendTelegramDocument } from '../../lib/telegram';
 
 const JobCom = () => {
     const [name, setName] = useState('');
@@ -17,50 +16,24 @@ const JobCom = () => {
     const [statusMsg, setStatusMsg] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const { addPost } = useBlog();
-
-    const BOT_TOKEN = '8093316717:AAHTCqtW189UlkgnW8X2SezZzOYSGdKwrx0';
-    const CHAT_ID = '-1002404493511';
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setStatus('');
 
-        const caption = `Application — Job Offer\nName: ${name}\nEmail: ${email}\nPhone: ${phoneNumber}\nJob Type: ${userType}${additionalContact ? `\nAdditional Contact: ${additionalContact}` : ''}\nMessage: ${message}`;
+        const caption = `🧑‍✈️ Driver Application\nName: ${name}\nEmail: ${email}\nPhone: ${phoneNumber}\nJob Type: ${userType}${additionalContact ? `\nAdditional Contact: ${additionalContact}` : ''}\nMessage: ${message}`;
 
         try {
             if (file) {
-                const formData = new FormData();
-                formData.append('document', file);
-                const res = await axios.post(
-                    `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`,
-                    formData,
-                    { headers: { 'Content-Type': 'multipart/form-data' }, params: { chat_id: CHAT_ID, caption } }
-                );
-                if (res.data.ok) {
-                    setStatus('success');
-                    setStatusMsg('Application submitted! We\'ll be in touch shortly.');
-                } else {
-                    setStatus('error');
-                    setStatusMsg('Error sending file. Please try again.');
-                }
+                await sendTelegramDocument(file, caption);
             } else {
-                const res = await axios.post(
-                    `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-                    { chat_id: CHAT_ID, text: caption }
-                );
-                if (res.data.ok) {
-                    setStatus('success');
-                    setStatusMsg('Application submitted! We\'ll be in touch shortly.');
-                    setName(''); setEmail(''); setPhoneNumber('');
-                    setAdditionalContact(''); setMessage(''); setFile(null); setConsent(false);
-                } else {
-                    setStatus('error');
-                    setStatusMsg('Something went wrong. Please try again.');
-                }
+                await sendTelegramMessage(caption);
             }
-        } catch (err) {
+            setStatus('success');
+            setStatusMsg('Application submitted! We\'ll be in touch shortly.');
+            setName(''); setEmail(''); setPhoneNumber('');
+            setAdditionalContact(''); setMessage(''); setFile(null); setConsent(false);
+        } catch {
             setStatus('error');
             setStatusMsg('An error occurred. Please try again later.');
         } finally {

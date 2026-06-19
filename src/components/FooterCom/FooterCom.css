@@ -235,6 +235,42 @@
     transform: translateX(4px);
 }
 
+.footer__track-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.88rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--color-white);
+    padding: 11px 20px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    transition: all 0.25s ease;
+}
+
+.footer__track-btn svg {
+    color: var(--color-primary);
+    transition: transform 0.4s ease;
+}
+
+.footer__track-btn:hover {
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.footer__track-btn:hover svg {
+    transform: rotate(40deg);
+}
+
 .footer__apply-btn {
     display: inline-flex;
     align-items: center;

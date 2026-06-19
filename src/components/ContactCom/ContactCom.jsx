@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './ContactsCom.css';
+import { sendTelegramMessage } from '../../lib/telegram';
+import PageHero from '../PageHero/PageHero.jsx';
 
 import { Link } from 'react-router-dom';
 
@@ -15,31 +16,20 @@ const ContactsCom = () => {
     const [statusMsg, setStatusMsg] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const BOT_TOKEN = '8093316717:AAHTCqtW189UlkgnW8X2SezZzOYSGdKwrx0';
-    const CHAT_ID = '-1002404493511';
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setStatus('');
 
-        const caption = `Contact Request:\nName: ${name}\nEmail: ${email}\nPhone: ${phoneNumber}\nCity: ${city}\nMessage: ${message}`;
+        const caption = `📩 Contact Request\nName: ${name}\nEmail: ${email}\nPhone: ${phoneNumber}\nCity: ${city}\nMessage: ${message}`;
 
         try {
-            const res = await axios.post(
-                `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-                { chat_id: CHAT_ID, text: caption }
-            );
-            if (res.data.ok) {
-                setStatus('success');
-                setStatusMsg('Your message was sent! We\'ll be in touch shortly.');
-                setName(''); setEmail(''); setPhoneNumber('');
-                setCity(''); setMessage(''); setConsent(false);
-            } else {
-                setStatus('error');
-                setStatusMsg('Something went wrong. Please try again.');
-            }
-        } catch (err) {
+            await sendTelegramMessage(caption);
+            setStatus('success');
+            setStatusMsg('Your message was sent! We\'ll be in touch shortly.');
+            setName(''); setEmail(''); setPhoneNumber('');
+            setCity(''); setMessage(''); setConsent(false);
+        } catch {
             setStatus('error');
             setStatusMsg('An error occurred. Please try again later.');
         } finally {
@@ -57,23 +47,11 @@ const ContactsCom = () => {
         <div className="contact-page">
 
             {/* ── Hero banner ───────────────────────────────── */}
-            <div className="contact-hero">
-                <div className="contact-hero__overlay" />
-                <div className="contact-hero__content">
-                    <span className="contact-hero__label">
-                        <span className="contact-hero__label-line" />
-                        Reach Out
-                    </span>
-                    <h1 className="contact-hero__title">
-                        Let's Get <span className="contact-hero__accent">Moving</span>
-                    </h1>
-                    <p className="contact-hero__sub">
-                        Have a shipment in mind? We're ready to help — reach out and
-                        our team will get back to you fast.
-                    </p>
-                </div>
-                <div className="contact-hero__diagonal" />
-            </div>
+            <PageHero
+                eyebrow="Reach Out"
+                title={<>Let's Get <em>Moving</em></>}
+                subtitle="Have a shipment in mind? We're ready to help — reach out and our team will get back to you fast."
+            />
 
             {/* ── Info cards ────────────────────────────────── */}
             <div className="contact-info-bar">

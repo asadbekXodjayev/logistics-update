@@ -2,17 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import HomeCom from '../../components/HomeCom/HomeCom.jsx';
 import AboutCom from '../../components/AboutCom/AbourtCom.jsx';
-import ServiceHomeCom from '../../components/Service/ServiceHomeCom.jsx';
+import TrailersSection from '../../components/Trailers/TrailersSection.jsx';
 import JobOfferCom from '../../components/JobCom/JobOfferCom.jsx';
 import ContactCom from '../../components/ContactCom/ContactCom.jsx';
+import PageTransition from '../../components/Motion/PageTransition.jsx';
+import { Reveal } from '../../components/Motion/Reveal.jsx';
 import '../Pages.css';
 
 const Home = () => {
     return (
+        <PageTransition>
         <div className="home-page">
             <HomeCom />
 
-            <section className="home-intro">
+            <Reveal as="section" className="home-intro">
                 <div className="home-intro__inner">
                     <div className="home-intro__label">
                         <span className="home-intro__line" />
@@ -33,13 +36,14 @@ const Home = () => {
                         <span className="home-intro__btn-arrow">→</span>
                     </Link>
                 </div>
-            </section>
+            </Reveal>
 
-            <ServiceHomeCom />
+            <TrailersSection theme="light" />
             <JobOfferCom />
             <AboutCom />
             <ContactCom />
         </div>
+        </PageTransition>
     );
 };
 

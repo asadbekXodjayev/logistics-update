@@ -1,12 +1,15 @@
 import React from 'react';
 import PrivacyCom from '../../components/PrivacyCom/PrivacyCom.jsx';
+import PageTransition from '../../components/Motion/PageTransition.jsx';
 import '../Pages.css';
 
 const Privacy = () => {
     return (
-        <div className="privacy-page">
-            <PrivacyCom />
-        </div>
+        <PageTransition>
+            <div className="privacy-page">
+                <PrivacyCom />
+            </div>
+        </PageTransition>
     );
 };
 

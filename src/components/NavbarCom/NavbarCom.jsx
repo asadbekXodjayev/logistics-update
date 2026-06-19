@@ -4,11 +4,13 @@ import { faAlignJustify, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './NavbarCom.css';
 import Logo from '/public/logo-white.svg';
+import { useTrackModal } from '../TrackModal/TrackModalContext.jsx';
 
 const NavbarCom = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
+    const { openTrack } = useTrackModal();
 
     // Detect scroll to add solid background when scrolled
     useEffect(() => {
@@ -58,6 +60,16 @@ const NavbarCom = () => {
 
                 {/* CTA + Burger */}
                 <div className="navbar__right">
+                    <button type="button" className="navbar__track" onClick={openTrack}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" strokeWidth="2.2"
+                            strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 7v5l3 2" />
+                        </svg>
+                        Track
+                    </button>
+
                     <Link to="/apply" className="navbar__cta">
                         Apply Now
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -99,8 +111,21 @@ const NavbarCom = () => {
                             </Link>
                         </li>
                     ))}
-                    <li className="navbar__drawer-item"
-                        style={{ animationDelay: '0.3s' }}>
+                    <li className="navbar__drawer-item" style={{ animationDelay: '0.3s' }}>
+                        <button
+                            type="button"
+                            className="navbar__drawer-cta navbar__drawer-cta--ghost"
+                            onClick={openTrack}
+                        >
+                            Track Shipment →
+                        </button>
+                    </li>
+                    <li className="navbar__drawer-item" style={{ animationDelay: '0.36s' }}>
+                        <Link to="/quote" className="navbar__drawer-cta navbar__drawer-cta--ghost">
+                            Request a Quote →
+                        </Link>
+                    </li>
+                    <li className="navbar__drawer-item" style={{ animationDelay: '0.42s' }}>
                         <Link to="/apply" className="navbar__drawer-cta">
                             Apply Now →
                         </Link>

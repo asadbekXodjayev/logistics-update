@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import PageTransition from '../../components/Motion/PageTransition.jsx';
 import '../Pages.css';
 
 const NotFound = () => {
     const navigate = useNavigate();
 
     return (
+        <PageTransition>
         <div className="nf-page">
             <div className="nf-page__overlay" />
             <div className="nf-page__bg" />
@@ -38,6 +40,7 @@ const NotFound = () => {
                 </div>
             </div>
         </div>
+        </PageTransition>
     );
 };
 

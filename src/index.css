@@ -38,6 +38,11 @@
     --container-max: 1280px;
     --container-pad: 0 40px;
 
+    /* Hero heights — Home is full-viewport; every secondary page shares
+       one standard height (matches the original Trucks/Services hero). */
+    --hero-height: clamp(360px, 58vh, 560px);
+    --hero-height-home: 100vh;
+
     /* Effects – Clean & Corporate */
     --shadow-gold: 0 2px 8px rgba(0, 31, 63, 0.15); /* Tinted shadow to match navy */
     --shadow-dark: 0 4px 20px rgba(0, 21, 48, 0.25);
@@ -690,5 +695,73 @@ textarea::placeholder {
 
     h1 {
         font-size: 2rem;
+    }
+}
+
+/* ============================================================
+   SHARED HERO HEIGHT
+   Home overrides to full viewport; all other page heroes inherit
+   the standard --hero-height so they line up consistently.
+   ============================================================ */
+.page-hero,
+.svc-hero,
+.news-hero,
+.contact-hero,
+.job-hero,
+.about-hero,
+.priv-hero,
+.pp-hero,
+.nf-hero {
+    min-height: var(--hero-height);
+}
+
+.hero-home {
+    min-height: var(--hero-height-home);
+}
+
+/* ============================================================
+   SKELETON LOADER (reusable)
+   ============================================================ */
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton {
+    position: relative;
+    background: linear-gradient(90deg,
+            rgba(0, 31, 63, 0.06) 25%,
+            rgba(0, 31, 63, 0.12) 37%,
+            rgba(0, 31, 63, 0.06) 63%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+    border-radius: var(--radius);
+}
+
+.skeleton--on-dark {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.06) 25%,
+            rgba(255, 255, 255, 0.14) 37%,
+            rgba(255, 255, 255, 0.06) 63%);
+    background-size: 200% 100%;
+}
+
+/* ============================================================
+   REDUCED MOTION — respect the user's OS setting.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }

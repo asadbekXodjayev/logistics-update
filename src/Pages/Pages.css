@@ -303,7 +303,7 @@
 .news-hero {
     position: relative;
     width: 100%;
-    min-height: 55vh;
+    min-height: var(--hero-height);
     background: var(--color-dark);
     border-left: 5px solid var(--color-primary);
     display: flex;
@@ -450,14 +450,6 @@
     .home-intro,
     .news-body {
         padding: 60px 16px;
-    }
-
-    .news-hero {
-        min-height: 30vh;
-    }
-
-    .news-hero__subtitle {
-        display: none;
     }
 
     .news-hero__inner {

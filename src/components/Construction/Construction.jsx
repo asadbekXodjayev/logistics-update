@@ -11,7 +11,7 @@ const Construction = () => {
                 <h1 className="loader"></h1>
             </div>
 
-            <style jsx>{`
+            <style>{`
         .construction-container {
           height: 100vh;
           display: flex;

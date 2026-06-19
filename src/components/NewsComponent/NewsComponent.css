@@ -1,28 +1,21 @@
 /* ============================================================
-   NewsComponent.css — single news/truck card
+   NewsComponent.css — single fleet/truck card (redesigned)
    ============================================================ */
-
-@keyframes nwsFadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
 .nws-card {
     position: relative;
     background: var(--color-white);
     border: 1px solid rgba(0, 31, 63, 0.08);
-    border-left: 5px solid var(--color-primary);
     font-family: var(--font-body);
     color: var(--color-dark);
     overflow: hidden;
-    transition: all 0.4s ease;
-    animation: nwsFadeInUp 0.7s ease both;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .nws-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 18px 44px rgba(0, 31, 63, 0.12);
-    border-left-color: var(--color-primary-dark);
+    transform: translateY(-8px);
+    box-shadow: 0 26px 56px rgba(0, 31, 63, 0.16);
 }
 
 /* ---------- Media ---------- */
@@ -31,7 +24,7 @@
     width: 100%;
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-2) 100%);
+    background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-3) 100%);
 }
 
 .nws-card__image {
@@ -39,98 +32,90 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.6s ease;
+    transition: transform 0.7s ease;
+}
+
+.nws-card__image--placeholder {
+    background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-3) 100%);
 }
 
 .nws-card:hover .nws-card__image {
-    transform: scale(1.06);
+    transform: scale(1.07);
 }
 
-.nws-card__corner {
+.nws-card__media-grad {
     position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 21, 48, 0.55) 0%, transparent 45%);
+    pointer-events: none;
+}
+
+.nws-card__tag {
+    position: absolute;
+    top: 16px;
+    left: 0;
     background: var(--color-primary);
+    color: var(--color-white);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 7px 16px 7px 18px;
     z-index: 2;
-}
-
-.nws-card__corner--h {
-    left: 0;
-    bottom: 0;
-    width: 56px;
-    height: 6px;
-}
-
-.nws-card__corner--v {
-    left: 0;
-    bottom: 0;
-    width: 6px;
-    height: 56px;
 }
 
 .nws-card__date {
     position: absolute;
-    top: 18px;
-    right: 18px;
-    background: var(--color-primary);
-    color: var(--color-dark);
-    padding: 10px 14px;
+    top: 16px;
+    right: 16px;
+    background: rgba(0, 21, 48, 0.82);
+    backdrop-filter: blur(4px);
+    color: var(--color-white);
+    padding: 9px 13px;
     text-align: center;
     font-family: var(--font-display);
     font-weight: 900;
     text-transform: uppercase;
     z-index: 2;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    border-bottom: 3px solid var(--color-primary);
 }
 
 .nws-card__date-day {
     display: block;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     line-height: 1;
 }
 
 .nws-card__date-month {
     display: block;
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 1px;
     margin-top: 2px;
-    opacity: 0.85;
+    opacity: 0.8;
 }
 
 /* ---------- Body ---------- */
 .nws-card__body {
-    padding: clamp(22px, 3vw, 34px);
-}
-
-.nws-card__label {
+    padding: clamp(22px, 3vw, 32px);
     display: flex;
-    align-items: center;
-    gap: 12px;
-    color: var(--color-primary);
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 12px;
-}
-
-.nws-card__line {
-    width: 28px;
-    height: 2px;
-    background: var(--color-primary);
+    flex-direction: column;
+    flex: 1;
 }
 
 .nws-card__title {
     font-family: var(--font-display);
     font-weight: 900;
-    font-size: clamp(1.3rem, 2vw, 1.7rem);
+    font-size: clamp(1.3rem, 2vw, 1.65rem);
     color: var(--color-dark);
     text-transform: uppercase;
-    line-height: 1.15;
+    line-height: 1.12;
     margin: 0 0 14px;
 }
 
 .nws-card__bar {
     display: block;
-    width: 50px;
+    width: 46px;
     height: 3px;
     background: var(--color-primary);
     margin-bottom: 16px;
@@ -142,24 +127,78 @@
 }
 
 .nws-card__desc {
-    color: var(--color-mid);
+    color: var(--text-on-light-muted);
     font-size: 0.95rem;
     line-height: 1.7;
-    margin: 0 0 16px;
+    margin: 0 0 18px;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
 .nws-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     color: var(--color-mid);
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    margin: 0;
-    padding-top: 14px;
+    margin: auto 0 0;
+    padding-top: 16px;
     border-top: 1px solid rgba(0, 31, 63, 0.08);
+}
+
+.nws-card__meta-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-primary);
+}
+
+/* ---------- Skeleton ---------- */
+.nws-card--skeleton {
+    pointer-events: none;
+}
+
+.nws-card--skeleton:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.nws-skel__media {
+    width: 100%;
+    height: 100%;
+}
+
+.nws-skel__line {
+    height: 13px;
+    margin-bottom: 12px;
+    border-radius: 3px;
+}
+
+.nws-skel__line--title {
+    height: 24px;
+    width: 70%;
+    margin-bottom: 16px;
+}
+
+.nws-skel__bar {
+    width: 46px;
+    height: 3px;
+    margin-bottom: 18px;
+}
+
+.nws-skel__line--short {
+    width: 55%;
+}
+
+.nws-skel__line--meta {
+    width: 40%;
+    height: 11px;
+    margin-top: 18px;
 }
 
 /* ---------- Responsive ---------- */
@@ -169,12 +208,10 @@
     }
 
     .nws-card__date {
-        top: 12px;
-        right: 12px;
-        padding: 8px 12px;
+        padding: 7px 11px;
     }
 
     .nws-card__date-day {
-        font-size: 1.3rem;
+        font-size: 1.25rem;
     }
 }

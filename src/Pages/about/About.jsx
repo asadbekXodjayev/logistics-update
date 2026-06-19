@@ -1,12 +1,15 @@
 import React from 'react';
 import AboutCom from '../../components/AboutCom/AbourtCom.jsx';
+import PageTransition from '../../components/Motion/PageTransition.jsx';
 import '../Pages.css';
 
 const About = () => {
     return (
-        <div className="about-page">
-            <AboutCom />
-        </div>
+        <PageTransition>
+            <div className="about-page">
+                <AboutCom />
+            </div>
+        </PageTransition>
     );
 };
 

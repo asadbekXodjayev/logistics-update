@@ -14,8 +14,7 @@
 .about-hero {
     position: relative;
     width: 100%;
-    height: 38vh;
-    min-height: 280px;
+    min-height: var(--hero-height);
     background: var(--color-dark);
     display: flex;
     align-items: center;
@@ -71,6 +70,14 @@
 .about-hero__accent {
     color: var(--color-primary);
     font-style: italic;
+}
+
+.about-hero__sub {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    line-height: 1.6;
+    max-width: 560px;
+    margin-top: 20px;
 }
 
 /* Diagonal bottom cut */
@@ -479,11 +486,6 @@
         padding: 0 20px 0 0;
         margin-right: 20px;
         margin-bottom: 12px;
-    }
-
-    .about-hero {
-        height: 30vh;
-        min-height: 220px;
     }
 
     .about-hero__content {

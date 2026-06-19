@@ -157,6 +157,41 @@
     transform: translateX(4px);
 }
 
+/* Track Shipment button (secondary, outline) */
+.navbar__track {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--color-white);
+    border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+    padding: 9px 18px;
+    border-radius: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.28s ease;
+}
+
+.navbar__track svg {
+    color: var(--color-primary);
+    transition: transform 0.4s ease;
+}
+
+.navbar__track:hover {
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary);
+    background: rgba(0, 123, 255, 0.08);
+}
+
+.navbar__track:hover svg {
+    transform: rotate(40deg);
+}
+
 /* Burger button */
 .navbar__burger {
     display: none;
@@ -270,6 +305,22 @@
     background-color: var(--color-primary-dark);
 }
 
+/* Ghost variant for secondary drawer CTAs (Track / Quote) */
+.navbar__drawer-cta--ghost {
+    background: transparent;
+    color: var(--color-white);
+    border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+    cursor: pointer;
+    width: calc(100% - 64px);
+    justify-content: center;
+}
+
+.navbar__drawer-cta--ghost:hover {
+    background: rgba(0, 123, 255, 0.1);
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary);
+}
+
 /* ============================================================
    ANIMATIONS
    ============================================================ */
@@ -294,6 +345,10 @@
     }
 
     .navbar__cta {
+        display: none;
+    }
+
+    .navbar__track {
         display: none;
     }
 

@@ -1,52 +1,61 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { BlogContext } from '../../Context.jsx';
-import NewsComponent from '../../components/NewsComponent/NewsComponent.jsx';
+import { useBlog } from '../../Context.jsx';
+import NewsComponent, { NewsSkeleton } from '../../components/NewsComponent/NewsComponent.jsx';
+import PageHero from '../../components/PageHero/PageHero.jsx';
+import PageTransition from '../../components/Motion/PageTransition.jsx';
+import { Stagger, StaggerItem } from '../../components/Motion/Reveal.jsx';
+import { scaleIn } from '../../lib/motion.js';
 import '../Pages.css';
 import './News.css';
 
+const SKELETON_COUNT = 6;
+
 const News = () => {
-    const { array } = useContext(BlogContext);
+    const { array, loading, error } = useBlog();
     const items = array?.filter((el) => el?.description !== 'Pumps-zegor') ?? [];
 
     return (
-        <div className="news-page">
-            <section className="news-hero">
-                <div className="news-hero__overlay" />
-                <div className="news-hero__inner">
-                    <div className="news-hero__label">
-                        <span className="news-hero__line" />
-                        <span>Our Fleet</span>
-                    </div>
-                    <h1 className="news-hero__title">
-                        Trucks <em>&amp; News</em>
-                    </h1>
-                    <p className="news-hero__subtitle">
-                        Meet the equipment moving your freight and stay up to date with the latest from our team on the road.
-                    </p>
-                </div>
-                <div className="news-hero__cut" />
-            </section>
+        <PageTransition>
+            <div className="news-page">
+                <PageHero
+                    eyebrow="Our Fleet"
+                    title={<>Trucks <em>&amp; News</em></>}
+                    subtitle="Meet the equipment moving your freight and stay up to date with the latest from our team on the road."
+                />
 
-            <section className="news-body">
-                {items.length > 0 ? (
-                    <div className="news-grid">
-                        {items.map((el) => (
-                            <NewsComponent key={el?._id} el={el} />
-                        ))}
-                    </div>
-                ) : (
-                    <p className="news-empty">No items to display right now.</p>
-                )}
+                <section className="news-body">
+                    {loading ? (
+                        <div className="news-grid">
+                            {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+                                <NewsSkeleton key={i} />
+                            ))}
+                        </div>
+                    ) : error ? (
+                        <div className="news-empty">
+                            <p>We couldn't load the fleet right now. Please try again shortly.</p>
+                        </div>
+                    ) : items.length > 0 ? (
+                        <Stagger className="news-grid" stagger={0.08} amount={0.05}>
+                            {items.map((el) => (
+                                <StaggerItem key={el?._id} variants={scaleIn}>
+                                    <NewsComponent el={el} />
+                                </StaggerItem>
+                            ))}
+                        </Stagger>
+                    ) : (
+                        <p className="news-empty">No items to display right now.</p>
+                    )}
 
-                <div className="news-cta">
-                    <Link to="/contact" className="news-cta__btn">
-                        Contact Us
-                        <span className="news-cta__btn-arrow">→</span>
-                    </Link>
-                </div>
-            </section>
-        </div>
+                    <div className="news-cta">
+                        <Link to="/quote" className="news-cta__btn">
+                            Request a Quote
+                            <span className="news-cta__btn-arrow">→</span>
+                        </Link>
+                    </div>
+                </section>
+            </div>
+        </PageTransition>
     );
 };
 

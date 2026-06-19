@@ -48,7 +48,7 @@ const AdminPanel = () => {
             const res = await fetch(API_URL);
             const data = await res.json();
             setTrucks(Array.isArray(data) ? data : []);
-        } catch (err) {
+        } catch {
             showSnack('Failed to load trucks', 'error');
         } finally {
             setLoading(false);
@@ -57,6 +57,7 @@ const AdminPanel = () => {
 
     useEffect(() => {
         fetchTrucks();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const openCreate = () => {
@@ -114,7 +115,7 @@ const AdminPanel = () => {
             showSnack(isEdit ? 'Truck updated' : 'Truck created');
             closeDialog();
             fetchTrucks();
-        } catch (err) {
+        } catch {
             showSnack(isEdit ? 'Update failed' : 'Create failed', 'error');
         }
     };
@@ -126,7 +127,7 @@ const AdminPanel = () => {
             if (!res.ok) throw new Error('Delete failed');
             showSnack('Truck deleted');
             fetchTrucks();
-        } catch (err) {
+        } catch {
             showSnack('Delete failed', 'error');
         }
     };
