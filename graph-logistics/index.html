@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MO Globe Trucking Corp — Architecture Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/elkjs@0.9.3/lib/elk.bundled.js"></script>
+<style>
+  :root{
+    --page:#fafafa; --panel:#fff; --node:#cde4f5; --node-bd:#7aaecc;
+    --appliance:#b8d0e8; --edge:#444; --error:#8b1a1a; --accent:#2a6099;
+    --edge-label:#555; --node-label:#333; --sec:#666; --zone-bd:#aaa;
+    --gen:#f5f5f5; --gen-tx:#999; --nav-bd:#ddd; --ts:#999;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--page);color:var(--node-label);
+    font-family:'IBM Plex Sans',sans-serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  nav.topnav{position:fixed;top:0;left:0;right:0;height:46px;background:var(--panel);
+    border-bottom:1px solid var(--nav-bd);display:flex;align-items:center;
+    padding:0 18px;z-index:50;gap:22px;}
+  .topnav .brand{font-size:14px;font-weight:600;}
+  .topnav .links{display:flex;gap:20px;flex:1;justify-content:center;}
+  .topnav a{font-size:13px;color:var(--node-label);text-decoration:none;padding:4px 2px;}
+  .topnav a.active{color:var(--accent);text-decoration:underline;text-underline-offset:4px;}
+  .topnav .ts{font-size:11px;color:var(--ts);}
+  main{max-width:1120px;margin:46px auto 60px;padding:26px 22px 0;}
+  header.hub{text-align:center;padding:24px 0 14px;}
+  header.hub h1{font-size:30px;font-weight:600;margin:0 0 8px;letter-spacing:-.5px;}
+  header.hub .sub{font-size:14px;color:var(--sec);margin:0;}
+  header.hub .sub .mono{color:var(--node-label);}
+  header.hub .stamp{font-size:11px;color:var(--ts);margin-top:10px;}
+  section{margin-top:34px;}
+  h2.sec{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--sec);
+    font-weight:600;margin:0 0 14px;border-bottom:1px solid var(--nav-bd);padding-bottom:6px;}
+  figure{margin:0;}
+  .diagram-wrap{position:relative;background:var(--panel);border:1px solid var(--nav-bd);
+    border-radius:8px;overflow:auto;max-height:640px;}
+  .zoombar{position:sticky;top:0;float:right;display:flex;gap:4px;margin:8px;z-index:6;
+    background:var(--panel);border:1px solid var(--nav-bd);border-radius:6px;padding:3px;}
+  .zoombar button{font:500 11px 'IBM Plex Mono',monospace;border:1px solid var(--nav-bd);
+    background:#fff;border-radius:4px;padding:3px 7px;cursor:pointer;color:var(--sec);}
+  .zoombar button:hover{border-color:var(--accent);color:var(--accent);}
+  #ov-scaler{transform-origin:0 0;}
+  figcaption{font-size:11.5px;color:var(--sec);font-style:italic;margin-top:8px;}
+  table.tech{width:100%;border-collapse:collapse;font-size:13px;background:var(--panel);}
+  table.tech th{text-align:left;font-weight:600;font-size:11px;text-transform:uppercase;
+    letter-spacing:.05em;color:var(--sec);border-bottom:1.5px solid #ccc;padding:8px 10px;}
+  table.tech td{padding:7px 10px;border-bottom:1px solid #eee;vertical-align:top;}
+  table.tech td.c{font-weight:500;}
+  table.tech td .mono{font-size:12px;color:var(--accent);}
+  table.tech td.src{color:var(--sec);font-size:12px;}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .cards a.card{display:block;background:var(--panel);border:1px solid var(--nav-bd);
+    border-radius:8px;padding:16px 18px;text-decoration:none;color:inherit;}
+  .cards a.card:hover{border-color:var(--accent);}
+  .cards .card h3{margin:0 0 6px;font-size:15px;font-weight:600;color:var(--accent);}
+  .cards .card p{margin:0;font-size:12.5px;color:var(--sec);line-height:1.5;}
+  @media(max-width:760px){.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <span class="brand">MO Globe Trucking Corp</span>
+  <span class="links">
+    <a href="index.html" class="active">Overview</a>
+    <a href="file-architecture.html">File Architecture</a>
+    <a href="system-design.html">System Design</a>
+    <a href="flow-graph.html">Flow Graph</a>
+  </span>
+  <span class="ts">Generated 2026-06-19T15:29:25+05:00</span>
+</nav>
+
+<main>
+  <header class="hub">
+    <h1>MO Globe Trucking Corp</h1>
+    <p class="sub">React 18 SPA · Vite 5 · <span class="mono">react-router-dom</span> v6 — freight &amp; logistics marketing site with admin CRUD</p>
+    <p class="stamp">Generated 2026-06-19T15:29:25+05:00</p>
+  </header>
+
+  <section>
+    <h2 class="sec">Architecture Overview</h2>
+    <figure>
+      <div class="diagram-wrap" id="ov-wrap">
+        <div class="zoombar">
+          <button data-z="0.75">75%</button>
+          <button data-z="1" class="on">100%</button>
+          <button data-z="1.25">125%</button>
+          <button data-z="fit">Fit</button>
+        </div>
+        <div id="ov-scaler"><svg id="ov-svg" xmlns="http://www.w3.org/2000/svg"></svg></div>
+      </div>
+      <figcaption>High-level runtime topology — the browser SPA reads fleet data from the products REST API and pushes form submissions to the Telegram Bot API. Static hosting on Vercel with SPA rewrite.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2 class="sec">Technology</h2>
+    <table class="tech">
+      <thead><tr><th>Component</th><th>Technology</th><th>Version</th><th>Source of Detection</th></tr></thead>
+      <tbody>
+        <tr><td class="c">UI runtime</td><td>React + React DOM</td><td class="mono">^18.3.1</td><td class="src">package.json dependencies</td></tr>
+        <tr><td class="c">Build / dev server</td><td>Vite + @vitejs/plugin-react-swc</td><td class="mono">^5.4.8 / ^3.5.0</td><td class="src">vite.config.js, package.json</td></tr>
+        <tr><td class="c">Routing</td><td>react-router-dom (+ hash-link)</td><td class="mono">^6.27.0 / ^2.4.3</td><td class="src">src/App.jsx, package.json</td></tr>
+        <tr><td class="c">Animation</td><td>framer-motion</td><td class="mono">^12.40.0</td><td class="src">src/lib/motion.js, Motion/*</td></tr>
+        <tr><td class="c">Admin UI kit</td><td>MUI (@mui/material + icons)</td><td class="mono">^6.1.6</td><td class="src">AdminPanel.jsx, Login.jsx (lazy)</td></tr>
+        <tr><td class="c">Styling engine</td><td>@emotion/react + styled, styled-components</td><td class="mono">^11.13 / ^6.1.13</td><td class="src">package.json (MUI peer + legacy)</td></tr>
+        <tr><td class="c">HTTP client</td><td>axios (+ native fetch)</td><td class="mono">^1.7.7</td><td class="src">src/lib/telegram.js, Context.jsx</td></tr>
+        <tr><td class="c">Icons</td><td>react-icons, FontAwesome</td><td class="mono">^5.3.0 / ^6.6.0</td><td class="src">NavbarCom, JobCom, footer, *Com</td></tr>
+        <tr><td class="c">Phone input</td><td>react-phone-input-2 + libphonenumber-js</td><td class="mono">^2.15.1 / ^1.11.12</td><td class="src">package.json dependencies</td></tr>
+        <tr><td class="c">Fleet data API</td><td>REST (external backend)</td><td class="mono">—</td><td class="src">Context.jsx, AdminPanel.jsx URL</td></tr>
+        <tr><td class="c">Notification sink</td><td>Telegram Bot API</td><td class="mono">—</td><td class="src">src/lib/telegram.js</td></tr>
+        <tr><td class="c">Test runner</td><td>Vitest + Testing Library (jsdom)</td><td class="mono">^2.1.9</td><td class="src">vite.config.js test block, *.test.jsx</td></tr>
+        <tr><td class="c">Lint</td><td>ESLint (+ react / hooks plugins)</td><td class="mono">^9.11.1</td><td class="src">eslint.config.js, package.json</td></tr>
+        <tr><td class="c">Hosting</td><td>Vercel static + SPA rewrite</td><td class="mono">—</td><td class="src">vercel.json, public/_redirects</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2 class="sec">Explore</h2>
+    <div class="cards">
+      <a class="card" href="file-architecture.html"><h3>File Architecture →</h3><p>The source tree under <span class="mono">src/</span> — pages, feature components, the motion layer, and shared libs, laid out as a dependency tree.</p></a>
+      <a class="card" href="system-design.html"><h3>System Design →</h3><p>Runtime topology across five tiers: browser client, the Vite/SPA shell, React provider &amp; route layer, client storage, and the external REST + Telegram services.</p></a>
+      <a class="card" href="flow-graph.html"><h3>Flow Graph →</h3><p>Five operational flows: startup &amp; provider boot, admin auth, the Telegram write path, the fleet read path, and error / recovery handling.</p></a>
+    </div>
+  </section>
+</main>
+
+<script type="application/json" id="graph-data">
+{
+  "schema": "sys-design/v2",
+  "kind": "meta",
+  "app": {
+    "name": "MO Globe Trucking Corp",
+    "stackLine": "React 18 SPA · Vite 5 · react-router-dom v6",
+    "generatedAt": "2026-06-19T15:29:25+05:00",
+    "description": "Freight & logistics marketing site (vite-project) with lazy-loaded admin CRUD; reads fleet data from an external REST API and posts form submissions to the Telegram Bot API."
+  },
+  "tech": [
+    { "component": "UI runtime", "technology": "React + React DOM", "version": "^18.3.1", "source": "package.json" },
+    { "component": "Build / dev server", "technology": "Vite + plugin-react-swc", "version": "^5.4.8", "source": "vite.config.js" },
+    { "component": "Routing", "technology": "react-router-dom", "version": "^6.27.0", "source": "src/App.jsx" },
+    { "component": "Animation", "technology": "framer-motion", "version": "^12.40.0", "source": "src/lib/motion.js" },
+    { "component": "Admin UI kit", "technology": "MUI", "version": "^6.1.6", "source": "src/Pages/Admin/AdminPanel.jsx" },
+    { "component": "HTTP client", "technology": "axios + fetch", "version": "^1.7.7", "source": "src/lib/telegram.js" },
+    { "component": "Fleet data API", "technology": "external REST backend", "version": "", "source": "src/Context.jsx" },
+    { "component": "Notification sink", "technology": "Telegram Bot API", "version": "", "source": "src/lib/telegram.js" },
+    { "component": "Test runner", "technology": "Vitest + Testing Library", "version": "^2.1.9", "source": "vite.config.js" },
+    { "component": "Hosting", "technology": "Vercel static + SPA rewrite", "version": "", "source": "vercel.json" }
+  ]
+}
+</script>
+
+<script>
+const OV = {
+  nodes: [
+    { id:"browser", label:"Web Browser", sub:"end user", shape:"external" },
+    { id:"vercel",  label:"Vercel Static Host", sub:"SPA rewrite → /", shape:"lb" },
+    { id:"spa",     label:"MO Globe SPA", sub:"React 18 + Vite bundle", shape:"standard" },
+    { id:"api",     label:"Products REST API", sub:"midnight-sec-back.onrender.com", shape:"db" },
+    { id:"tg",      label:"Telegram Bot API", sub:"api.telegram.org", shape:"external" }
+  ],
+  edges: [
+    { source:"browser", target:"vercel", label:"HTTPS :443", bi:true },
+    { source:"vercel",  target:"spa",    label:"static assets", bi:false },
+    { source:"spa",     target:"api",    label:"GET/POST/PUT/DELETE JSON", bi:true },
+    { source:"spa",     target:"tg",     label:"POST sendMessage/Document", bi:false }
+  ]
+};
+
+const FONT_TITLE="600 13px 'IBM Plex Sans'";
+const FONT_SUB="11px 'IBM Plex Mono'";
+const FONT_EDGE="10px 'IBM Plex Mono'";
+const SVGNS="http://www.w3.org/2000/svg";
+const _c=document.createElement("canvas").getContext("2d");
+function measure(t,f){_c.font=f;return _c.measureText(t).width;}
+
+function nodeSize(n){
+  const w1=measure(n.label,FONT_TITLE);
+  const w2=n.sub?measure(n.sub,FONT_SUB):0;
+  const w=Math.max(120,Math.max(w1,w2)+32);
+  return { w:Math.ceil(w), h:n.sub?58:44 };
+}
+
+async function render(){
+  await document.fonts.ready;
+  const elk=new ELK();
+  const g={ id:"root",
+    layoutOptions:{
+      "elk.algorithm":"org.eclipse.elk.layered",
+      "elk.direction":"DOWN",
+      "elk.spacing.nodeNode":"40",
+      "elk.layered.spacing.nodeNodeBetweenLayers":"70",
+      "elk.edgeRouting":"ORTHOGONAL",
+      "elk.layered.edgeLabels.sideSelection":"ALWAYS_DOWN",
+      "elk.layered.considerModelOrder.strategy":"NODES_AND_EDGES",
+      "elk.spacing.edgeLabel":"6",
+      "elk.spacing.edgeNode":"24"
+    },
+    children:OV.nodes.map(n=>{const s=nodeSize(n);return {id:n.id,width:s.w,height:s.h};}),
+    edges:OV.edges.map((e,i)=>({
+      id:"e"+i, sources:[e.source], targets:[e.target],
+      labels:[{text:e.label,width:Math.ceil(measure(e.label,FONT_EDGE))+8,height:14}]
+    }))
+  };
+  const r=await elk.layout(g);
+  draw(r);
+}
+
+function elbow(pts){return pts.map((p,i)=>(i?"L":"M")+p.x+" "+p.y).join(" ");}
+
+function draw(r){
+  const svg=document.getElementById("ov-svg");
+  const PAD=30;
+  const W=Math.ceil(r.width)+PAD*2, H=Math.ceil(r.height)+PAD*2;
+  svg.setAttribute("width",W); svg.setAttribute("height",H);
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const byId={}; OV.nodes.forEach(n=>byId[n.id]=n);
+  let s=`<defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0L7 3L0 6Z" fill="#444"/></marker>
+    <pattern id="dot" width="5" height="5" patternUnits="userSpaceOnUse">
+      <rect width="5" height="5" fill="#cde4f5"/><circle cx="1.5" cy="1.5" r="0.9" fill="#7aaecc"/></pattern>
+  </defs><g transform="translate(${PAD},${PAD})">`;
+  // edges
+  (r.edges||[]).forEach((e,i)=>{
+    const sec=e.sections&&e.sections[0]; if(!sec)return;
+    const pts=[sec.startPoint,...(sec.bendPoints||[]),sec.endPoint];
+    s+=`<path d="${elbow(pts)}" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"`;
+    if(OV.edges[i].bi)s+=` marker-start="url(#ar)"`;
+    s+=`/>`;
+  });
+  // edge labels
+  (r.edges||[]).forEach((e)=>{
+    (e.labels||[]).forEach(l=>{
+      const w=l.width,h=14;
+      s+=`<g transform="translate(${l.x},${l.y})">
+        <rect x="0" y="0" width="${w}" height="${h}" rx="3" fill="#fff" stroke="#e3e3e3"/>
+        <text x="${w/2}" y="${h/2+3.5}" text-anchor="middle" font-family="'IBM Plex Mono'" font-size="10" fill="#555">${esc(l.text)}</text></g>`;
+    });
+  });
+  // nodes
+  (r.children||[]).forEach(c=>{
+    const n=byId[c.id]; s+=drawNode(n,c.x,c.y,c.width,c.height);
+  });
+  s+=`</g>`;
+  svg.innerHTML=s;
+}
+
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+function drawNode(n,x,y,w,h){
+  const fill = n.shape==="cache" ? "url(#dot)" : (n.shape==="lb"||n.shape==="db"?"#b8d0e8":"#cde4f5");
+  const dash = n.shape==="external" ? ` stroke-dasharray="5 3"` : "";
+  let g=`<g transform="translate(${x},${y})">`;
+  g+=`<rect width="${w}" height="${h}" rx="4" fill="${fill}" stroke="#7aaecc" stroke-width="1"${dash}/>`;
+  // port lines (behind text, 25% opacity)
+  g+=`<g opacity="0.25">`;
+  for(let i=1;i<=6;i++){const ly=h*i/7;g+=`<line x1="6" y1="${ly}" x2="${w-10}" y2="${ly}" stroke="#7aaecc" stroke-width="1"/>`;}
+  g+=`</g>`;
+  // port indicator
+  g+=`<rect x="${w-6}" y="${h/2-6}" width="4" height="12" rx="1" fill="#7aaecc"/>`;
+  // db double bottom
+  if(n.shape==="db")g+=`<line x1="0" y1="${h-3}" x2="${w}" y2="${h-3}" stroke="#7aaecc" stroke-width="1"/>`;
+  // lb top lines
+  if(n.shape==="lb"){g+=`<line x1="8" y1="7" x2="${w-12}" y2="7" stroke="#7aaecc" stroke-width="1"/><line x1="8" y1="11" x2="${w-12}" y2="11" stroke="#7aaecc" stroke-width="1"/>`;}
+  // text
+  if(n.sub){
+    g+=`<text x="${w/2}" y="${h/2-3}" text-anchor="middle" font-family="'IBM Plex Sans'" font-weight="600" font-size="13" fill="#333">${esc(n.label)}</text>`;
+    g+=`<text x="${w/2}" y="${h/2+13}" text-anchor="middle" font-family="'IBM Plex Mono'" font-size="11" font-style="italic" fill="#666">${esc(n.sub)}</text>`;
+  }else{
+    g+=`<text x="${w/2}" y="${h/2+4}" text-anchor="middle" font-family="'IBM Plex Sans'" font-weight="600" font-size="13" fill="#333">${esc(n.label)}</text>`;
+  }
+  g+=`</g>`;
+  return g;
+}
+
+// zoom
+(function(){
+  const wrap=document.getElementById("ov-wrap");
+  const scaler=document.getElementById("ov-scaler");
+  const btns=wrap.querySelectorAll(".zoombar button");
+  btns.forEach(b=>b.addEventListener("click",()=>{
+    btns.forEach(x=>x.classList.remove("on")); b.classList.add("on");
+    const z=b.dataset.z;
+    const svg=document.getElementById("ov-svg");
+    const baseW=parseFloat(svg.getAttribute("width"))||900;
+    let scale=1;
+    if(z==="fit"){scale=(wrap.clientWidth-20)/baseW;}
+    else scale=parseFloat(z);
+    scaler.style.transform=`scale(${scale})`;
+    scaler.style.width=(baseW*scale)+"px";
+    scaler.style.height=((parseFloat(svg.getAttribute("height"))||400)*scale)+"px";
+  }));
+})();
+
+render();
+</script>
+</body>
+</html>

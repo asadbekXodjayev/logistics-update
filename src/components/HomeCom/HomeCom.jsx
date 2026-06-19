@@ -39,7 +39,7 @@ const HomeCom = () => {
                 </p>
 
                 <div className="hero__actions">
-                    <a href="/apply" className="hero__btn hero__btn--primary">
+                    <a href="/apply" className="btn btn-primary">
                         Drive With Us
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" strokeWidth="2.5"
@@ -47,7 +47,7 @@ const HomeCom = () => {
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
                     </a>
-                    <a href="/services" className="hero__btn hero__btn--outline">
+                    <a href="/services" className="btn btn-secondary">
                         Our Services
                     </a>
                 </div>

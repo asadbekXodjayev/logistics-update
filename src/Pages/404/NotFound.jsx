@@ -26,13 +26,13 @@ const NotFound = () => {
                     The route you tried doesn't exist or has been moved. Let's get you back on track.
                 </p>
                 <div className="nf-page__actions">
-                    <Link to="/" className="nf-btn nf-btn--primary">
+                    <Link to="/" className="btn btn-primary">
                         Back to Home
                         <span className="nf-btn__arrow">→</span>
                     </Link>
                     <button
                         type="button"
-                        className="nf-btn nf-btn--outline"
+                        className="btn btn-secondary"
                         onClick={() => navigate(-1)}
                     >
                         Go Back

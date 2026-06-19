@@ -1,0 +1,80 @@
+/* ============================================================
+   Error boundary fallback
+   ============================================================ */
+.errbound {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-dark);
+    border-left: 5px solid var(--color-primary);
+    padding: 60px 24px;
+}
+
+.errbound__inner {
+    max-width: 560px;
+    text-align: center;
+}
+
+.errbound__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: 14px;
+}
+
+.errbound__line {
+    width: 26px;
+    height: 2px;
+    background: var(--color-primary);
+}
+
+.errbound__title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 1.04;
+    color: var(--color-white);
+    margin-bottom: 16px;
+}
+
+.errbound__title em {
+    color: var(--color-primary);
+    font-style: italic;
+}
+
+.errbound__text {
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.7;
+    margin-bottom: 28px;
+}
+
+.errbound__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 30px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.errbound__btn:hover {
+    background: #fff;
+    color: var(--color-dark);
+}

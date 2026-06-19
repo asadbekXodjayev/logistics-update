@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MO Globe Trucking Corp — File Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/elkjs@0.9.3/lib/elk.bundled.js"></script>
+<style>
+  :root{--page:#fafafa;--panel:#fff;--node-bd:#7aaecc;--edge:#444;--accent:#2a6099;
+    --sec:#666;--gen:#f5f5f5;--gen-tx:#999;--nav-bd:#ddd;--ts:#999;}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--page);color:#333;font-family:'IBM Plex Sans',sans-serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  nav.topnav{position:fixed;top:0;left:0;right:0;height:46px;background:var(--panel);
+    border-bottom:1px solid var(--nav-bd);display:flex;align-items:center;padding:0 18px;z-index:50;gap:22px;}
+  .topnav .brand{font-size:14px;font-weight:600;}
+  .topnav .links{display:flex;gap:20px;flex:1;justify-content:center;}
+  .topnav a{font-size:13px;color:#333;text-decoration:none;padding:4px 2px;}
+  .topnav a.active{color:var(--accent);text-decoration:underline;text-underline-offset:4px;}
+  .topnav .ts{font-size:11px;color:var(--ts);}
+  main{margin-top:46px;padding:14px;}
+  h1.pt{font-size:18px;font-weight:600;margin:6px 6px 2px;}
+  p.lead{font-size:12.5px;color:var(--sec);margin:0 6px 12px;}
+  .toolbar{display:flex;gap:10px;align-items:center;margin:0 6px 10px;flex-wrap:wrap;}
+  .toolbar input{font:13px 'IBM Plex Sans';padding:6px 10px;border:1px solid var(--nav-bd);
+    border-radius:6px;width:230px;}
+  .zoombar{display:flex;gap:4px;background:var(--panel);border:1px solid var(--nav-bd);border-radius:6px;padding:3px;}
+  .zoombar button{font:500 11px 'IBM Plex Mono';border:1px solid var(--nav-bd);background:#fff;
+    border-radius:4px;padding:3px 7px;cursor:pointer;color:var(--sec);}
+  .zoombar button.on,.zoombar button:hover{border-color:var(--accent);color:var(--accent);}
+  .stage{position:relative;}
+  .diagram-wrap{position:relative;background:var(--panel);border:1px solid var(--nav-bd);
+    border-radius:8px;overflow:auto;height:calc(100vh - 210px);min-height:420px;}
+  #fa-scaler{transform-origin:0 0;}
+  .legend{position:absolute;top:12px;right:12px;background:#fff;border:1px solid var(--nav-bd);
+    border-radius:6px;padding:9px 11px;font-size:11px;z-index:8;max-width:220px;}
+  .legend h4{margin:0 0 6px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--sec);}
+  .legend .row{display:flex;align-items:center;gap:6px;margin:3px 0;color:#444;}
+  .legend .sw{width:22px;height:12px;border-radius:2px;display:inline-block;flex:0 0 auto;}
+  .legend .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);}
+  aside.panel{position:fixed;top:46px;right:0;width:300px;height:calc(100vh - 46px);
+    background:var(--panel);border-left:1px solid var(--nav-bd);box-shadow:-3px 0 14px rgba(0,0,0,.06);
+    transform:translateX(100%);transition:transform .25s;z-index:40;overflow:auto;padding:18px;}
+  aside.panel.open{transform:translateX(0);}
+  aside.panel h3{margin:0 0 4px;font-size:15px;}
+  aside.panel .pth{font-size:11.5px;color:var(--accent);word-break:break-all;margin-bottom:12px;}
+  aside.panel .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--sec);
+    margin:12px 0 4px;font-weight:600;}
+  aside.panel .val{font-size:12.5px;color:#333;line-height:1.5;}
+  aside.panel ul{margin:4px 0;padding-left:16px;font-size:12px;}
+  aside.panel .close{position:absolute;top:12px;right:14px;border:none;background:none;font-size:20px;
+    cursor:pointer;color:var(--sec);}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <span class="brand">MO Globe Trucking Corp</span>
+  <span class="links">
+    <a href="index.html">Overview</a>
+    <a href="file-architecture.html" class="active">File Architecture</a>
+    <a href="system-design.html">System Design</a>
+    <a href="flow-graph.html">Flow Graph</a>
+  </span>
+  <span class="ts">Generated 2026-06-19T15:29:25+05:00</span>
+</nav>
+
+<main>
+  <h1 class="pt">File System Architecture</h1>
+  <p class="lead">Source tree under <span class="mono">src/</span> plus root config, laid out left-to-right by ELK. Click a directory to collapse it; click a file for details. Test files use a dashed border; the entry point is marked with an accent dot.</p>
+  <div class="toolbar">
+    <input id="fa-search" type="search" placeholder="Search files…" aria-label="Search files" />
+    <div class="zoombar">
+      <button data-z="0.75">75%</button>
+      <button data-z="1" class="on">100%</button>
+      <button data-z="1.25">125%</button>
+      <button data-z="fit">Fit-width</button>
+    </div>
+  </div>
+  <div class="stage">
+    <div class="diagram-wrap" id="fa-wrap">
+      <div class="legend">
+        <h4>File-type tags</h4>
+        <div class="row"><span class="sw" style="background:#b08c2a"></span> JS / JSX</div>
+        <div class="row"><span class="sw" style="background:#5a7a3a"></span> JSON</div>
+        <div class="row"><span class="sw" style="background:#a05a2a"></span> HTML</div>
+        <div class="row"><span class="sw" style="background:#999999"></span> TXT / XML</div>
+        <div class="row"><span class="sw" style="background:#7a7a7a"></span> SVG / other</div>
+        <h4 style="margin-top:9px">Markers</h4>
+        <div class="row"><span class="dot"></span> Entry point</div>
+        <div class="row"><span class="sw" style="background:#fff;border:1px dashed #7aaecc"></span> Test file</div>
+        <div class="row"><span class="sw" style="background:#f5f5f5;border:1px solid #ccc"></span> Generated</div>
+      </div>
+      <div id="fa-scaler"><svg id="fa-svg" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    </div>
+  </div>
+</main>
+
+<aside class="panel" id="fa-panel" aria-hidden="true">
+  <button class="close" id="fa-close" aria-label="Close">&times;</button>
+  <h3 id="p-name"></h3>
+  <div class="pth mono" id="p-path"></div>
+  <div class="lbl">Role</div><div class="val" id="p-role"></div>
+  <div class="lbl">Imports</div><div class="val" id="p-imp"></div>
+  <div class="lbl">Exports</div><div class="val" id="p-exp"></div>
+  <div class="lbl">Approx. lines</div><div class="val" id="p-lines"></div>
+  <div class="lbl">Reverse dependencies</div><div class="val" id="p-rev"></div>
+</aside>
+
+<script type="application/json" id="graph-data">
+{
+  "schema": "sys-design/v2",
+  "kind": "file-architecture",
+  "nodes": [
+    { "id":"root", "label":"logistics/", "dir":true, "meta":{"role":"Project root","imp":"—","exp":"—","lines":"—","rev":"—"} },
+    { "id":"index", "label":"index.html", "tag":"HTML", "entry":true, "meta":{"role":"Static Asset","imp":"/src/main.jsx","exp":"—","lines":"54","rev":"Vite entry (build)"} },
+    { "id":"pkg", "label":"package.json", "tag":"JSON", "meta":{"role":"Configuration","imp":"—","exp":"—","lines":"51","rev":"npm, Vite"} },
+    { "id":"vite", "label":"vite.config.js", "tag":"JS", "meta":{"role":"Build Script","imp":"vite, plugin-react-swc","exp":"defineConfig","lines":"35","rev":"vite, vitest"} },
+    { "id":"eslint", "label":"eslint.config.js", "tag":"JS", "meta":{"role":"Configuration","imp":"@eslint/js, globals","exp":"flat config array","lines":"~30","rev":"eslint CLI"} },
+    { "id":"vercel", "label":"vercel.json", "tag":"JSON", "meta":{"role":"Configuration","imp":"—","exp":"SPA rewrite → /","lines":"8","rev":"Vercel host"} },
+
+    { "id":"src", "label":"src/", "dir":true, "meta":{"role":"Source root","imp":"—","exp":"—","lines":"—","rev":"—"} },
+    { "id":"main", "label":"main.jsx", "tag":"JS", "entry":true, "meta":{"role":"Application Entry","imp":"App, BrowserRouter, BlogProvider, TrackModalProvider, ErrorBoundary","exp":"—","lines":"22","rev":"index.html"} },
+    { "id":"app", "label":"App.jsx", "tag":"JS", "meta":{"role":"Route Controller","imp":"NavbarCom, FooterCom, ScrollToTop, ProtectedRoute, RouteFallback, 11 lazy pages","exp":"App","lines":"58","rev":"main.jsx"} },
+    { "id":"ctx", "label":"Context.jsx", "tag":"JS", "meta":{"role":"State Provider","imp":"react","exp":"BlogContext, BlogProvider, useBlog","lines":"38","rev":"main.jsx, News.jsx"} },
+
+    { "id":"lib", "label":"lib/", "dir":true, "meta":{"role":"Shared libraries","imp":"—","exp":"—","lines":"—","rev":"—"} },
+    { "id":"telegram", "label":"telegram.js", "tag":"JS", "meta":{"role":"Service","imp":"axios","exp":"sendTelegramMessage, sendTelegramDocument","lines":"60","rev":"ContactCom, JobCom, QuoteCom, TrackModal"} },
+    { "id":"trailers", "label":"trailers.js", "tag":"JS", "meta":{"role":"Data Model","imp":"—","exp":"TRAILERS, TRAILER_NAMES","lines":"52","rev":"TrailersSection, ServiceCom, QuoteCom, FooterCom"} },
+    { "id":"motionlib", "label":"motion.js", "tag":"JS", "meta":{"role":"Utility","imp":"—","exp":"fadeUp, fadeIn, slideInLeft/Right, scaleIn, staggerContainer, hoverLift","lines":"52","rev":"Reveal.jsx, News.jsx, ServiceCom"} },
+    { "id":"trailerstest", "label":"trailers.test.js", "tag":"JS", "test":true, "meta":{"role":"Test Suite","imp":"vitest, trailers.js","exp":"—","lines":"26","rev":"vitest"} },
+
+    { "id":"pages", "label":"Pages/", "dir":true, "meta":{"role":"Route pages","imp":"—","exp":"—","lines":"—","rev":"—"} },
+    { "id":"home", "label":"home/Home.jsx", "tag":"JS", "meta":{"role":"UI Component (page)","imp":"HomeCom, AboutCom, TrailersSection, JobOfferCom, ContactCom, PageTransition, Reveal","exp":"Home","lines":"50","rev":"App.jsx (lazy)"} },
+    { "id":"about", "label":"about/About.jsx", "tag":"JS", "meta":{"role":"UI Component (page)","imp":"AboutCom, PageTransition","exp":"About","lines":"16","rev":"App.jsx (lazy)"} },
+    { "id":"job", "label":"job/Job.jsx", "tag":"JS", "meta":{"role":"UI Component (page)","imp":"JobCom, PageTransition","exp":"Job","lines":"16","rev":"App.jsx (lazy) — /apply"} },
+    { "id":"contacts", "label":"contact/Contacts.jsx", "tag":"JS", "meta":{"role":"UI Component (page)","imp":"ContactCom, PageTransition","exp":"Contacts","lines":"16","rev":"App.jsx (lazy)"} },
+    { "id":"news", "label":"News/News.jsx", "tag":"JS", "meta":{"role":"UI Component (page)","imp":"useBlog, NewsComponent, PageHero, PageTransition, Stagger, scaleIn","exp":"News","lines":"62","rev":"App.jsx (lazy) — /trucks"} },
+    { "id":"service", "label":"Service/Service.jsx", "tag":"JS", "meta":{"role":"UI Component (page)","imp":"ServiceCom","exp":"Service","lines":"13","rev":"App.jsx (lazy)"} },
+    { "id":"quote", "label":"Quote/Quote.jsx", "tag":"JS", "meta":{"role":"UI Component (page)","imp":"QuoteCom, PageTransition","exp":"Quote","lines":"13","rev":"App.jsx (lazy)"} },
+    { "id":"privacy", "label":"privacy/privacy.jsx", "tag":"JS", "meta":{"role":"UI Component (page)","imp":"PrivacyCom, PageTransition","exp":"Privacy","lines":"16","rev":"App.jsx (lazy)"} },
+    { "id":"login", "label":"Login/Login.jsx", "tag":"JS", "meta":{"role":"UI Component (page)","imp":"@mui/material, react-router-dom","exp":"Login","lines":"124","rev":"App.jsx (lazy)"} },
+    { "id":"admin", "label":"Admin/AdminPanel.jsx", "tag":"JS", "meta":{"role":"UI Component (page)","imp":"@mui/material, @mui/icons-material, react-router-dom","exp":"AdminPanel","lines":"362","rev":"App.jsx (lazy, via ProtectedRoute)"} },
+    { "id":"notfound", "label":"404/NotFound.jsx", "tag":"JS", "meta":{"role":"UI Component (page)","imp":"PageTransition, react-router-dom","exp":"NotFound","lines":"47","rev":"App.jsx (lazy) — *"} },
+    { "id":"scroll", "label":"Scroll To Top/ScrollToTop.jsx", "tag":"JS", "meta":{"role":"Utility","imp":"react-router-dom","exp":"ScrollToTop","lines":"15","rev":"App.jsx"} },
+
+    { "id":"comp", "label":"components/", "dir":true, "meta":{"role":"Feature components","imp":"—","exp":"—","lines":"—","rev":"—"} },
+    { "id":"navbar", "label":"NavbarCom.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"react-router-dom, FontAwesome, useTrackModal, logo-white.svg","exp":"NavbarCom","lines":"138","rev":"App.jsx"} },
+    { "id":"footer", "label":"FooterCom.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"react-router-dom, useTrackModal, TRAILERS, react-icons","exp":"Footer","lines":"143","rev":"App.jsx"} },
+    { "id":"homecom", "label":"HomeCom.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"react","exp":"HomeCom","lines":"79","rev":"Home.jsx"} },
+    { "id":"aboutcom", "label":"AboutCom/AbourtCom.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"PageHero, react-icons, 4 webp images","exp":"AboutCom","lines":"181","rev":"Home.jsx, About.jsx"} },
+    { "id":"contactcom", "label":"ContactCom.jsx", "tag":"JS", "meta":{"role":"UI Component (form)","imp":"sendTelegramMessage, PageHero, react-icons, Link","exp":"ContactsCom","lines":"200","rev":"Home.jsx, Contacts.jsx"} },
+    { "id":"jobcom", "label":"JobCom/JobCom.jsx", "tag":"JS", "meta":{"role":"UI Component (form)","imp":"sendTelegramMessage, sendTelegramDocument, react-icons, Link","exp":"JobCom","lines":"225","rev":"Job.jsx"} },
+    { "id":"joboffer", "label":"JobCom/JobOfferCom.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"react-router-dom, react-icons","exp":"JobOfferCom","lines":"96","rev":"Home.jsx"} },
+    { "id":"quotecom", "label":"QuoteCom/QuoteCom.jsx", "tag":"JS", "meta":{"role":"UI Component (form)","imp":"Reveal, sendTelegramMessage, TRAILER_NAMES, react-icons","exp":"QuoteCom","lines":"218","rev":"Quote.jsx"} },
+    { "id":"newscomp", "label":"NewsComponent.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"react","exp":"NewsComponent, NewsSkeleton","lines":"57","rev":"News.jsx"} },
+    { "id":"servicecom", "label":"Service/ServiceCom.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"react-router-dom, TRAILERS, PageHero, PageTransition, Reveal, motion","exp":"ServiceCom","lines":"72","rev":"Service.jsx"} },
+    { "id":"servicehome", "label":"Service/ServiceHomeCom.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"react-router-dom","exp":"ServiceHomeCom","lines":"67","rev":"—"} },
+    { "id":"privacycom", "label":"PrivacyCom.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"react-router-dom","exp":"PrivacyCom","lines":"122","rev":"privacy.jsx"} },
+    { "id":"pagehero", "label":"PageHero/PageHero.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"framer-motion","exp":"PageHero","lines":"69","rev":"News, About, Contact, Service forms"} },
+    { "id":"routefb", "label":"RouteFallback.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"react","exp":"RouteFallback","lines":"11","rev":"App.jsx (Suspense)"} },
+    { "id":"errbound", "label":"ErrorBoundary/ErrorBoundary.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"react","exp":"ErrorBoundary","lines":"61","rev":"main.jsx"} },
+    { "id":"errboundtest", "label":"ErrorBoundary.test.jsx", "tag":"JS", "test":true, "meta":{"role":"Test Suite","imp":"vitest, Testing Library, ErrorBoundary","exp":"—","lines":"32","rev":"vitest"} },
+    { "id":"protected", "label":"ProtectedRoute.jsx", "tag":"JS", "meta":{"role":"Route Guard","imp":"react-router-dom","exp":"ProtectedRoute","lines":"28","rev":"App.jsx (/admin)"} },
+    { "id":"construction", "label":"Construction/Construction.jsx", "tag":"JS", "meta":{"role":"UI Component (disabled)","imp":"react","exp":"Construction","lines":"70","rev":"App.jsx (commented out)"} },
+
+    { "id":"motion", "label":"Motion/", "dir":true, "meta":{"role":"Motion layer","imp":"—","exp":"—","lines":"—","rev":"—"} },
+    { "id":"reveal", "label":"Reveal.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"framer-motion, motion.js","exp":"Reveal, Stagger, StaggerItem","lines":"121","rev":"Home, News, Quote, Trailers, Service"} },
+    { "id":"pagetrans", "label":"PageTransition.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"framer-motion","exp":"PageTransition","lines":"27","rev":"all page wrappers"} },
+
+    { "id":"trackmodal", "label":"TrackModal/", "dir":true, "meta":{"role":"Track modal feature","imp":"—","exp":"—","lines":"—","rev":"—"} },
+    { "id":"tm", "label":"TrackModal.jsx", "tag":"JS", "meta":{"role":"UI Component (form)","imp":"framer-motion, sendTelegramMessage, react-icons","exp":"TrackModal","lines":"199","rev":"TrackModalContext.jsx"} },
+    { "id":"tmctx", "label":"TrackModalContext.jsx", "tag":"JS", "meta":{"role":"State Provider","imp":"react, TrackModal","exp":"TrackModalProvider, useTrackModal","lines":"23","rev":"main.jsx, NavbarCom, FooterCom"} },
+    { "id":"tmtest", "label":"TrackModal.test.jsx", "tag":"JS", "test":true, "meta":{"role":"Test Suite","imp":"vitest, Testing Library, TrackModal","exp":"—","lines":"32","rev":"vitest"} },
+
+    { "id":"trailersdir", "label":"Trailers/", "dir":true, "meta":{"role":"Trailers feature","imp":"—","exp":"—","lines":"—","rev":"—"} },
+    { "id":"trailerssec", "label":"TrailersSection.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"react-router-dom, Reveal/Stagger, TRAILERS, TrailerIcon","exp":"TrailersSection","lines":"63","rev":"Home.jsx"} },
+    { "id":"trailericon", "label":"TrailerIcon.jsx", "tag":"JS", "meta":{"role":"UI Component","imp":"react, public/icons/*.svg","exp":"TrailerIcon","lines":"34","rev":"TrailersSection.jsx"} },
+    { "id":"trailerssectest", "label":"TrailersSection.test.jsx", "tag":"JS", "test":true, "meta":{"role":"Test Suite","imp":"vitest, Testing Library","exp":"—","lines":"27","rev":"vitest"} },
+    { "id":"quotetest", "label":"QuoteCom.test.jsx", "tag":"JS", "test":true, "meta":{"role":"Test Suite","imp":"vitest, Testing Library, QuoteCom","exp":"—","lines":"32","rev":"vitest"} },
+
+    { "id":"test", "label":"test/setup.js", "tag":"JS", "meta":{"role":"Test Setup","imp":"@testing-library/jest-dom","exp":"—","lines":"~3","rev":"vitest (setupFiles)"} },
+
+    { "id":"public", "label":"public/", "dir":true, "meta":{"role":"Static assets","imp":"—","exp":"—","lines":"—","rev":"—"} },
+    { "id":"logos", "label":"logo-white / -red / -for-website.svg", "tag":"SVG", "meta":{"role":"Static Asset","imp":"—","exp":"—","lines":"—","rev":"NavbarCom, FooterCom, index.html"} },
+    { "id":"icons", "label":"icons/ (6 trailer SVGs)", "dir":true, "meta":{"role":"Static Asset","imp":"—","exp":"—","lines":"—","rev":"TrailerIcon.jsx (CSS mask)"} },
+    { "id":"webp", "label":"*.webp fleet photos", "tag":"WEBP", "meta":{"role":"Static Asset","imp":"—","exp":"—","lines":"—","rev":"AboutCom, og:image"} },
+    { "id":"robots", "label":"robots.txt", "tag":"TXT", "meta":{"role":"Static Asset","imp":"—","exp":"—","lines":"—","rev":"crawlers"} },
+    { "id":"sitemap", "label":"sitemap.xml", "tag":"XML", "meta":{"role":"Static Asset","imp":"—","exp":"—","lines":"—","rev":"crawlers"} },
+    { "id":"redirects", "label":"_redirects", "tag":"TXT", "meta":{"role":"Configuration","imp":"—","exp":"SPA fallback","lines":"—","rev":"static host"} }
+  ],
+  "edges": [
+    { "source":"root", "target":"index" },
+    { "source":"root", "target":"pkg" },
+    { "source":"root", "target":"vite" },
+    { "source":"root", "target":"eslint" },
+    { "source":"root", "target":"vercel" },
+    { "source":"root", "target":"src" },
+    { "source":"root", "target":"public" },
+
+    { "source":"src", "target":"main" },
+    { "source":"src", "target":"app" },
+    { "source":"src", "target":"ctx" },
+    { "source":"src", "target":"lib" },
+    { "source":"src", "target":"pages" },
+    { "source":"src", "target":"comp" },
+    { "source":"src", "target":"test" },
+
+    { "source":"lib", "target":"telegram" },
+    { "source":"lib", "target":"trailers" },
+    { "source":"lib", "target":"motionlib" },
+    { "source":"lib", "target":"trailerstest" },
+
+    { "source":"pages", "target":"home" },
+    { "source":"pages", "target":"about" },
+    { "source":"pages", "target":"job" },
+    { "source":"pages", "target":"contacts" },
+    { "source":"pages", "target":"news" },
+    { "source":"pages", "target":"service" },
+    { "source":"pages", "target":"quote" },
+    { "source":"pages", "target":"privacy" },
+    { "source":"pages", "target":"login" },
+    { "source":"pages", "target":"admin" },
+    { "source":"pages", "target":"notfound" },
+    { "source":"pages", "target":"scroll" },
+
+    { "source":"comp", "target":"navbar" },
+    { "source":"comp", "target":"footer" },
+    { "source":"comp", "target":"homecom" },
+    { "source":"comp", "target":"aboutcom" },
+    { "source":"comp", "target":"contactcom" },
+    { "source":"comp", "target":"jobcom" },
+    { "source":"comp", "target":"joboffer" },
+    { "source":"comp", "target":"quotecom" },
+    { "source":"comp", "target":"newscomp" },
+    { "source":"comp", "target":"servicecom" },
+    { "source":"comp", "target":"servicehome" },
+    { "source":"comp", "target":"privacycom" },
+    { "source":"comp", "target":"pagehero" },
+    { "source":"comp", "target":"routefb" },
+    { "source":"comp", "target":"errbound" },
+    { "source":"comp", "target":"errboundtest" },
+    { "source":"comp", "target":"protected" },
+    { "source":"comp", "target":"construction" },
+    { "source":"comp", "target":"motion" },
+    { "source":"comp", "target":"trackmodal" },
+    { "source":"comp", "target":"trailersdir" },
+
+    { "source":"motion", "target":"reveal" },
+    { "source":"motion", "target":"pagetrans" },
+
+    { "source":"trackmodal", "target":"tm" },
+    { "source":"trackmodal", "target":"tmctx" },
+    { "source":"trackmodal", "target":"tmtest" },
+
+    { "source":"trailersdir", "target":"trailerssec" },
+    { "source":"trailersdir", "target":"trailericon" },
+    { "source":"trailersdir", "target":"trailerssectest" },
+    { "source":"quotecom", "target":"quotetest" },
+
+    { "source":"public", "target":"logos" },
+    { "source":"public", "target":"icons" },
+    { "source":"public", "target":"webp" },
+    { "source":"public", "target":"robots" },
+    { "source":"public", "target":"sitemap" },
+    { "source":"public", "target":"redirects" }
+  ]
+}
+</script>
+
+<script>
+const TAG_COLORS={TS:"#2a6099",JS:"#b08c2a",PY:"#3a7a4a",CS:"#6a4a8a",CPP:"#8a4a4a",
+  H:"#b8763a",SQL:"#4a7a8a",YML:"#7a6a3a",JSON:"#5a7a3a",ENV:"#888888",MD:"#4a6a8a",
+  CFG:"#777777",RESX:"#9a7a5a",TXT:"#999999",HTML:"#a05a2a",CSS:"#2a7a9a",
+  XML:"#999999",WEBP:"#7a7a7a",SVG:"#7a7a7a"};
+const SVGNS="http://www.w3.org/2000/svg";
+const FONT_TITLE="600 13px 'IBM Plex Sans'";
+const FONT_SUB="11px 'IBM Plex Mono'";
+const _c=document.createElement("canvas").getContext("2d");
+function measure(t,f){_c.font=f;return _c.measureText(t).width;}
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+const DATA=JSON.parse(document.getElementById("graph-data").textContent);
+const NODES={}; DATA.nodes.forEach(n=>NODES[n.id]=n);
+const collapsed=new Set();
+
+function descendants(id){
+  const out=new Set(); const stack=[id];
+  while(stack.length){const cur=stack.pop();
+    DATA.edges.filter(e=>e.source===cur).forEach(e=>{if(!out.has(e.target)){out.add(e.target);stack.push(e.target);}});}
+  return out;
+}
+function hiddenSet(){
+  const hidden=new Set();
+  collapsed.forEach(c=>descendants(c).forEach(d=>hidden.add(d)));
+  return hidden;
+}
+function sizeOf(n){
+  const w1=measure(n.label,FONT_TITLE);
+  const w=Math.max(120,w1+32+(n.tag?20:0));
+  return {w:Math.ceil(w),h:44};
+}
+
+async function render(){
+  await document.fonts.ready;
+  const hidden=hiddenSet();
+  const vis=DATA.nodes.filter(n=>!hidden.has(n.id));
+  const visIds=new Set(vis.map(n=>n.id));
+  const elk=new ELK();
+  const g={id:"root",
+    layoutOptions:{
+      "elk.algorithm":"org.eclipse.elk.layered",
+      "elk.direction":"RIGHT",
+      "elk.spacing.nodeNode":"40",
+      "elk.layered.spacing.nodeNodeBetweenLayers":"70",
+      "elk.edgeRouting":"ORTHOGONAL",
+      "elk.layered.considerModelOrder.strategy":"NODES_AND_EDGES",
+      "elk.spacing.edgeNode":"24"
+    },
+    children:vis.map(n=>{const s=sizeOf(n);return {id:n.id,width:s.w,height:s.h};}),
+    edges:DATA.edges.filter(e=>visIds.has(e.source)&&visIds.has(e.target))
+      .map((e,i)=>({id:"e"+i,sources:[e.source],targets:[e.target]}))
+  };
+  const r=await elk.layout(g);
+  draw(r);
+}
+
+function elbow(pts){return pts.map((p,i)=>(i?"L":"M")+p.x+" "+p.y).join(" ");}
+
+function draw(r){
+  const svg=document.getElementById("fa-svg");
+  const PAD=30;
+  const W=Math.ceil(r.width)+PAD*2, H=Math.ceil(r.height)+PAD*2;
+  svg.setAttribute("width",W); svg.setAttribute("height",H);
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  let s=`<defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+    <path d="M0 0L6 3L0 6Z" fill="#444"/></marker></defs><g transform="translate(${PAD},${PAD})">`;
+  (r.edges||[]).forEach(e=>{
+    const sec=e.sections&&e.sections[0]; if(!sec)return;
+    const pts=[sec.startPoint,...(sec.bendPoints||[]),sec.endPoint];
+    s+=`<path d="${elbow(pts)}" fill="none" stroke="#444" stroke-width="1.5" marker-end="url(#ar)"/>`;
+  });
+  (r.children||[]).forEach(c=>{ s+=drawNode(NODES[c.id],c.x,c.y,c.width,c.height); });
+  s+=`</g>`;
+  svg.innerHTML=s;
+  bind();
+}
+
+function drawNode(n,x,y,w,h){
+  const isCol=collapsed.has(n.id);
+  const fill=n.gen?"#f5f5f5":(n.dir?"#cde4f5":"#fff");
+  const stroke=n.test?"#7aaecc":(n.dir?"#7aaecc":"#c8c8c8");
+  const dash=n.test?` stroke-dasharray="4 3"`:"";
+  let g=`<g class="fnode" data-id="${n.id}" style="cursor:pointer">`;
+  g+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" fill="${fill}" stroke="${stroke}" stroke-width="1"${dash}/>`;
+  if(n.dir){g+=`<line x1="${x}" y1="${y+3}" x2="${x+w}" y2="${y+3}" stroke="#7aaecc" stroke-width="1"/>`;}
+  g+=`<g opacity="0.2">`;
+  for(let i=1;i<=5;i++){const ly=y+h*i/6;g+=`<line x1="${x+6}" y1="${ly}" x2="${x+w-8}" y2="${ly}" stroke="#7aaecc" stroke-width="1"/>`;}
+  g+=`</g>`;
+  if(n.entry)g+=`<circle cx="${x+8}" cy="${y+8}" r="4" fill="#2a6099"/>`;
+  if(n.tag){const col=TAG_COLORS[n.tag]||"#7a7a7a";
+    g+=`<rect x="${x+w-30}" y="${y+2}" width="28" height="14" rx="2" fill="${col}"/>`;
+    g+=`<text x="${x+w-16}" y="${y+12}" text-anchor="middle" font-family="'IBM Plex Mono'" font-size="8.5" fill="#fff">${esc(n.tag)}</text>`;}
+  const tx=x+w/2+(n.tag?-6:0);
+  const lbl=n.dir&&isCol?n.label+" ▸":n.label;
+  g+=`<text x="${tx}" y="${y+h/2+4}" text-anchor="middle" font-family="'IBM Plex Sans'" font-weight="${n.dir?600:500}" font-size="12.5" fill="${n.gen?'#999':'#333'}">${esc(lbl)}</text>`;
+  g+=`</g>`;
+  return g;
+}
+
+function bind(){
+  document.querySelectorAll(".fnode").forEach(el=>{
+    el.addEventListener("click",()=>{
+      const id=el.dataset.id; const n=NODES[id];
+      if(n.dir){ if(collapsed.has(id))collapsed.delete(id);else collapsed.add(id); render(); }
+      else openPanel(n);
+    });
+  });
+}
+
+function openPanel(n){
+  const m=n.meta||{};
+  document.getElementById("p-name").textContent=n.label;
+  document.getElementById("p-path").textContent=pathOf(n.id);
+  document.getElementById("p-role").textContent=m.role||"—";
+  document.getElementById("p-imp").textContent=m.imp||"—";
+  document.getElementById("p-exp").textContent=m.exp||"—";
+  document.getElementById("p-lines").textContent=m.lines||"—";
+  document.getElementById("p-rev").textContent=m.rev||"—";
+  const p=document.getElementById("fa-panel"); p.classList.add("open"); p.setAttribute("aria-hidden","false");
+}
+function pathOf(id){
+  // reconstruct dotted path from parent edges
+  const parent={}; DATA.edges.forEach(e=>parent[e.target]=e.source);
+  const chain=[]; let cur=id;
+  while(cur){chain.unshift(NODES[cur].label);cur=parent[cur];}
+  return chain.join("/").replace(/\/\//g,"/");
+}
+document.getElementById("fa-close").addEventListener("click",()=>{
+  const p=document.getElementById("fa-panel"); p.classList.remove("open"); p.setAttribute("aria-hidden","true");
+});
+
+// search
+document.getElementById("fa-search").addEventListener("input",e=>{
+  const q=e.target.value.trim().toLowerCase();
+  const nodes=document.querySelectorAll(".fnode");
+  let first=null;
+  nodes.forEach(el=>{
+    const n=NODES[el.dataset.id];
+    const hit=q&&n.label.toLowerCase().includes(q);
+    if(!q){el.style.opacity="1";el.querySelector("rect").removeAttribute("stroke-opacity");el.querySelectorAll("rect").forEach(r=>r.style.outline="");el.style.filter="";}
+    else if(hit){el.style.opacity="1";el.querySelector("rect").setAttribute("stroke","#caa70a");el.querySelector("rect").setAttribute("stroke-width","2.5");if(!first)first=el;}
+    else{el.style.opacity="0.2";}
+  });
+  if(first)first.scrollIntoView({behavior:"smooth",block:"center",inline:"center"});
+});
+
+// zoom
+(function(){
+  const wrap=document.getElementById("fa-wrap");
+  const scaler=document.getElementById("fa-scaler");
+  const btns=document.querySelectorAll(".zoombar button");
+  btns.forEach(b=>b.addEventListener("click",()=>{
+    btns.forEach(x=>x.classList.remove("on")); b.classList.add("on");
+    const svg=document.getElementById("fa-svg");
+    const baseW=parseFloat(svg.getAttribute("width"))||900;
+    const baseH=parseFloat(svg.getAttribute("height"))||600;
+    let scale=b.dataset.z==="fit"?(wrap.clientWidth-20)/baseW:parseFloat(b.dataset.z);
+    scaler.style.transform=`scale(${scale})`;
+    scaler.style.width=(baseW*scale)+"px";
+    scaler.style.height=(baseH*scale)+"px";
+  }));
+})();
+
+render();
+</script>
+</body>
+</html>

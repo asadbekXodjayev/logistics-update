@@ -48,7 +48,7 @@ const News = () => {
                     )}
 
                     <div className="news-cta">
-                        <Link to="/quote" className="news-cta__btn">
+                        <Link to="/quote" className="btn btn-primary">
                             Request a Quote
                             <span className="news-cta__btn-arrow">→</span>
                         </Link>

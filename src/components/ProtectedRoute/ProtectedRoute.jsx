@@ -2,8 +2,8 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
 // These are your locally defined credentials
-const ADMIN_LOGIN = 'moglobeadmin';
-const ADMIN_PASSWORD = 'adminmoglobe';
+const ADMIN_LOGIN = 'logistics@admin.com';
+const ADMIN_PASSWORD = 'Logistics123@#';
 
 /**
  * For local simulation:

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import './AboutCom.css';
 import PageHero from '../PageHero/PageHero.jsx';
+import { LuZap, LuHardHat, LuRadioTower, LuWrench } from 'react-icons/lu';
 import Image1 from '../../../public/photo_2024-11-11_18-31-04.webp';
 import Image2 from '../../../public/IMG_4627.webp';
 import Image3 from '../../../public/photo_2024-11-12_11-57-03.webp';
@@ -24,10 +25,10 @@ const sections = [
         img: Image2,
         description: `MO GLOBE TRUCKING stands out for its unwavering commitment to Reliability, Heavy Haul expertise, and exceptional customer care. From RGN Lowboys to Amazon Logistics, we run a diverse fleet that handles every freight challenge.`,
         features: [
-            { icon: '⚡', title: 'Heavy Haul Ready', text: 'RGN Lowboy capability for oversized machinery, equipment, and high-clearance industrial loads.' },
-            { icon: '👷', title: 'Experienced Professionals', text: 'Skilled American drivers and logistics experts trained on every trailer type we operate.' },
-            { icon: '📡', title: 'Full-Spectrum Equipment', text: 'Flatbed, Stepdeck, Dry Van, Reefer, and Power Only — one carrier, every solution.' },
-            { icon: '🔧', title: 'Amazon Network Approved', text: 'Compliant, on-time fulfillment within dedicated Amazon Logistics lanes.' },
+            { icon: LuZap, title: 'Heavy Haul Ready', text: 'RGN Lowboy capability for oversized machinery, equipment, and high-clearance industrial loads.' },
+            { icon: LuHardHat, title: 'Experienced Professionals', text: 'Skilled American drivers and logistics experts trained on every trailer type we operate.' },
+            { icon: LuRadioTower, title: 'Full-Spectrum Equipment', text: 'Flatbed, Stepdeck, Dry Van, Reefer, and Power Only — one carrier, every solution.' },
+            { icon: LuWrench, title: 'Amazon Network Approved', text: 'Compliant, on-time fulfillment within dedicated Amazon Logistics lanes.' },
         ],
     },
     {
@@ -50,7 +51,7 @@ const sections = [
     },
 ];
 
-const AboutCom = () => {
+const AboutCom = ({ showHero = true }) => {
     const sectionRefs = useRef([]);
 
     useEffect(() => {
@@ -70,12 +71,14 @@ const AboutCom = () => {
 
     return (
         <div className="about-page">
-            {/* Page Hero Banner */}
-            <PageHero
-                eyebrow="Our Story"
-                title={<>Built on <em>Trust</em>, Driven by Results.</>}
-                subtitle="A powerful American carrier moving freight across all 48 states — with the equipment, people, and reliability your business runs on."
-            />
+            {/* Page Hero Banner — only on the dedicated /about route */}
+            {showHero && (
+                <PageHero
+                    eyebrow="Our Story"
+                    title={<>Built on <em>Trust</em>, Driven by Results.</>}
+                    subtitle="A powerful American carrier moving freight across all 48 states — with the equipment, people, and reliability your business runs on."
+                />
+            )}
 
             {/* Content Sections */}
             <div className="about-sections">
@@ -87,7 +90,7 @@ const AboutCom = () => {
                     >
                         {/* Image column */}
                         <div className="about-section__img-wrap">
-                            <img src={sec.img} alt={sec.title} className="about-section__img" />
+                            <img src={sec.img} alt={sec.title} className="about-section__img" loading="lazy" decoding="async" />
                             <div className="about-section__img-overlay" />
                             {/* Gold corner accent */}
                             <div className="about-section__img-corner" />
@@ -122,15 +125,18 @@ const AboutCom = () => {
                             {/* Feature list (section 1) */}
                             {sec.features && (
                                 <ul className="about-features">
-                                    {sec.features.map((f, fi) => (
-                                        <li key={fi} className="about-feature">
-                                            <span className="about-feature__icon">{f.icon}</span>
-                                            <div>
-                                                <strong className="about-feature__title">{f.title}</strong>
-                                                <p className="about-feature__text">{f.text}</p>
-                                            </div>
-                                        </li>
-                                    ))}
+                                    {sec.features.map((f, fi) => {
+                                        const Icon = f.icon;
+                                        return (
+                                            <li key={fi} className="about-feature">
+                                                <span className="about-feature__icon"><Icon size={22} /></span>
+                                                <div>
+                                                    <strong className="about-feature__title">{f.title}</strong>
+                                                    <p className="about-feature__text">{f.text}</p>
+                                                </div>
+                                            </li>
+                                        );
+                                    })}
                                 </ul>
                             )}
 
@@ -152,7 +158,7 @@ const AboutCom = () => {
                             {/* CTA (section 3) */}
                             {sec.cta && (
                                 <div className="about-cta-row">
-                                    <a href="/contact" className="about-cta-btn about-cta-btn--primary">
+                                    <a href="/quote" className="btn btn-primary">
                                         Get a Free Quote
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                                             stroke="currentColor" strokeWidth="2.5"
@@ -160,7 +166,7 @@ const AboutCom = () => {
                                             <path d="M5 12h14M12 5l7 7-7 7" />
                                         </svg>
                                     </a>
-                                    <a href="/services" className="about-cta-btn about-cta-btn--outline">
+                                    <a href="/services" className="btn btn-secondary">
                                         Our Services
                                     </a>
                                 </div>

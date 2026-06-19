@@ -42,7 +42,7 @@ const ServiceCom = () => {
                                     <h2 className="svc-row__title">{trailer.name}</h2>
                                     <span className="svc-row__bar" />
                                     <p className="svc-row__desc">{trailer.description}</p>
-                                    <Link to="/quote" className="svc-btn svc-btn--outline">
+                                    <Link to="/quote" className="btn btn-secondary">
                                         Request a Quote
                                         <span className="svc-btn__arrow">→</span>
                                     </Link>
@@ -59,7 +59,7 @@ const ServiceCom = () => {
                     <p className="svc-cta__text">
                         Talk to our dispatch team and get a tailored solution for your lane.
                     </p>
-                    <Link to="/quote" className="svc-btn svc-btn--primary">
+                    <Link to="/quote" className="btn btn-primary">
                         Request a Quote
                         <span className="svc-btn__arrow">→</span>
                     </Link>

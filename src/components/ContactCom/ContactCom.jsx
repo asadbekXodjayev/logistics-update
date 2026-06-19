@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import './ContactsCom.css';
 import { sendTelegramMessage } from '../../lib/telegram';
 import PageHero from '../PageHero/PageHero.jsx';
+import { LuCheck, LuX } from 'react-icons/lu';
 
 import { Link } from 'react-router-dom';
 
-const ContactsCom = () => {
+const ContactsCom = ({ showHero = true }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -46,12 +47,14 @@ const ContactsCom = () => {
     return (
         <div className="contact-page">
 
-            {/* ── Hero banner ───────────────────────────────── */}
-            <PageHero
-                eyebrow="Reach Out"
-                title={<>Let's Get <em>Moving</em></>}
-                subtitle="Have a shipment in mind? We're ready to help — reach out and our team will get back to you fast."
-            />
+            {/* ── Hero banner — only on the dedicated /contact route ── */}
+            {showHero && (
+                <PageHero
+                    eyebrow="Reach Out"
+                    title={<>Let's Get <em>Moving</em></>}
+                    subtitle="Have a shipment in mind? We're ready to help — reach out and our team will get back to you fast."
+                />
+            )}
 
             {/* ── Info cards ────────────────────────────────── */}
             <div className="contact-info-bar">
@@ -96,7 +99,7 @@ const ContactsCom = () => {
                             'Serving all 48 contiguous states',
                         ].map((item, i) => (
                             <li key={i} className="contact-side__list-item">
-                                <span className="contact-side__check">✓</span>
+                                <span className="contact-side__check"><LuCheck size={12} /></span>
                                 {item}
                             </li>
                         ))}
@@ -164,7 +167,10 @@ const ContactsCom = () => {
                         {/* Status message */}
                         {status && (
                             <div className={`contact-form__field contact-form__field--full contact-status contact-status--${status}`}>
-                                {status === 'success' ? '✓ ' : '✕ '}{statusMsg}
+                                {status === 'success'
+                                    ? <LuCheck size={16} style={{ verticalAlign: '-3px', marginRight: 6 }} />
+                                    : <LuX size={16} style={{ verticalAlign: '-3px', marginRight: 6 }} />}
+                                {statusMsg}
                             </div>
                         )}
 

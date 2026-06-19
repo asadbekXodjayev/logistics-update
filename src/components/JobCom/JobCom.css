@@ -182,7 +182,8 @@
 }
 
 .job-side__perk-icon {
-    font-size: 1.1rem;
+    display: inline-flex;
+    color: var(--color-primary);
     flex-shrink: 0;
 }
 
@@ -582,6 +583,21 @@
     height: 50px;
     background: var(--color-dark);
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.job-offer-icon {
+    display: block;
+    width: 42px;
+    height: 42px;
+    background-color: var(--color-white);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
 }
 .job-offer-card__icon {
     width: 40px;
@@ -640,7 +656,7 @@
     width: 18px;
     height: 18px;
     background: var(--color-primary);
-    color: var(--color-dark);
+    color: var(--color-white);
     font-size: 0.65rem;
     font-weight: 900;
     border-radius: 50%;

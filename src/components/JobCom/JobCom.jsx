@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import './JobCom.css';
 import { Link } from 'react-router-dom';
 import { sendTelegramMessage, sendTelegramDocument } from '../../lib/telegram';
+import {
+    LuBadgeDollarSign, LuMilestone, LuHeartPulse, LuHeadphones,
+    LuWrench, LuClipboardList, LuPaperclip, LuCheck, LuX,
+} from 'react-icons/lu';
 
 const JobCom = () => {
     const [name, setName] = useState('');
@@ -82,18 +86,21 @@ const JobCom = () => {
                     </p>
                     <ul className="job-side__perks">
                         {[
-                            { icon: '💰', text: 'Competitive pay & bonuses' },
-                            { icon: '🛣️', text: 'Consistent, long-haul miles' },
-                            { icon: '🏥', text: 'Health benefits available' },
-                            { icon: '📡', text: '24/7 dispatch support' },
-                            { icon: '🔧', text: 'Fleet maintenance covered' },
-                            { icon: '📋', text: 'CDL not required to apply' },
-                        ].map((p, i) => (
-                            <li key={i} className="job-side__perk">
-                                <span className="job-side__perk-icon">{p.icon}</span>
-                                {p.text}
-                            </li>
-                        ))}
+                            { icon: LuBadgeDollarSign, text: 'Competitive pay & bonuses' },
+                            { icon: LuMilestone, text: 'Consistent, long-haul miles' },
+                            { icon: LuHeartPulse, text: 'Health benefits available' },
+                            { icon: LuHeadphones, text: '24/7 dispatch support' },
+                            { icon: LuWrench, text: 'Fleet maintenance covered' },
+                            { icon: LuClipboardList, text: 'CDL not required to apply' },
+                        ].map((p, i) => {
+                            const Icon = p.icon;
+                            return (
+                                <li key={i} className="job-side__perk">
+                                    <span className="job-side__perk-icon"><Icon size={20} /></span>
+                                    {p.text}
+                                </li>
+                            );
+                        })}
                     </ul>
                 </aside>
 
@@ -154,7 +161,9 @@ const JobCom = () => {
                             </label>
                             <div className="job-form__file-wrap">
                                 <label htmlFor="jf-file" className="job-form__file-label">
-                                    {file ? `📎 ${file.name}` : '+ Choose File'}
+                                    {file ? (
+                                        <><LuPaperclip size={15} style={{ verticalAlign: '-2px', marginRight: 6 }} />{file.name}</>
+                                    ) : '+ Choose File'}
                                 </label>
                                 <input id="jf-file" type="file" accept=".pdf,.doc,.docx,.txt"
                                     onChange={e => setFile(e.target.files[0])} />
@@ -183,7 +192,10 @@ const JobCom = () => {
                         {/* Status */}
                         {status && (
                             <div className={`job-form__field job-form__field--full job-status job-status--${status}`}>
-                                {status === 'success' ? '✓ ' : '✕ '}{statusMsg}
+                                {status === 'success'
+                                    ? <LuCheck size={16} style={{ verticalAlign: '-3px', marginRight: 6 }} />
+                                    : <LuX size={16} style={{ verticalAlign: '-3px', marginRight: 6 }} />}
+                                {statusMsg}
                             </div>
                         )}
 

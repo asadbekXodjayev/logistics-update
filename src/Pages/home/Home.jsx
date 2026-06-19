@@ -31,7 +31,7 @@ const Home = () => {
                         the distance. Let us take the complexity out of logistics so you can focus on what matters
                         most — growing your business.
                     </p>
-                    <Link to="/apply" className="home-intro__btn">
+                    <Link to="/apply" className="btn btn-primary">
                         Become a Driver
                         <span className="home-intro__btn-arrow">→</span>
                     </Link>
@@ -40,8 +40,8 @@ const Home = () => {
 
             <TrailersSection theme="light" />
             <JobOfferCom />
-            <AboutCom />
-            <ContactCom />
+            <AboutCom showHero={false} />
+            <ContactCom showHero={false} />
         </div>
         </PageTransition>
     );

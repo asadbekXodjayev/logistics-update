@@ -193,29 +193,31 @@ section {
     white-space: nowrap;
 }
 
-/* Primary – Red fill */
+/* Primary – Navy fill, white border, inverts to white on hover */
 .btn-primary {
-    background-color: var(--color-primary);
+    background-color: var(--color-dark);
     color: var(--color-white);
-    border-color: var(--color-primary);
+    border: 2px solid var(--color-white);
 }
 
 .btn-primary:hover {
-    background-color: var(--color-primary-dark);
-    border-color: var(--color-primary-dark);
-    box-shadow: var(--shadow-gold);
+    background-color: var(--color-white);
+    color: var(--color-dark);
+    border: 2px solid var(--color-dark);
 }
 
-/* Secondary – Outline red */
+/* Secondary – White fill, navy border + white glow on hover */
 .btn-secondary {
-    background-color: transparent;
-    color: var(--color-primary);
-    border-color: var(--color-primary);
+    background-color: var(--color-white);
+    color: var(--color-dark);
+    border: 2px solid transparent;
 }
 
 .btn-secondary:hover {
-    background-color: var(--color-primary);
-    color: var(--color-white);
+    background-color: var(--color-white);
+    color: var(--color-dark);
+    border: 2px solid var(--color-dark);
+    box-shadow: 0 6px 24px rgba(255, 255, 255, 0.35);
 }
 
 /* Dark fill – Navy */
@@ -249,10 +251,6 @@ button {
     font-family: var(--font-body);
     cursor: pointer;
     transition: var(--transition);
-}
-
-button:hover {
-    border-color: var(--color-primary);
 }
 
 /* ============================================================

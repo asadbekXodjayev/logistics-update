@@ -4,6 +4,7 @@ import './FooterCom.css';
 import Logo from '/public/logo-white.svg';
 import { useTrackModal } from '../TrackModal/TrackModalContext.jsx';
 import { TRAILERS } from '../../lib/trailers';
+import { LuMail, LuPhone, LuMapPin } from 'react-icons/lu';
 
 const pages = [
     { to: '/about', label: 'About Us' },
@@ -40,15 +41,15 @@ const Footer = () => {
                     {/* Contact details */}
                     <ul className="footer__contact-list">
                         <li className="footer__contact-item">
-                            <span className="footer__contact-icon">✉</span>
+                            <span className="footer__contact-icon"><LuMail size={16} /></span>
                             <a href="mailto:info@moglobetrucking.com">info@moglobetrucking.com</a>
                         </li>
                         <li className="footer__contact-item">
-                            <span className="footer__contact-icon">✆</span>
+                            <span className="footer__contact-icon"><LuPhone size={16} /></span>
                             <a href="tel:+15127870305">(512) 787-0305</a>
                         </li>
                         <li className="footer__contact-item">
-                            <span className="footer__contact-icon">⊙</span>
+                            <span className="footer__contact-icon"><LuMapPin size={16} /></span>
                             <span>5203 Golden Gate Dr,<br />Killeen, TX 76549</span>
                         </li>
                     </ul>

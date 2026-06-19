@@ -1,28 +1,34 @@
 // ============================================================
-// Trailer-type icons sourced from react-icons (real, open-source
-// icon sets — Font Awesome 6 + Game Icons). Fill uses currentColor
-// so each icon inherits the surrounding text color.
+// Trailer-type icons — uses the SVG files in public/icons/.
+// The files are monochrome, so we render them as a CSS mask and
+// fill with currentColor (the card's blue accent) to stay on-brand.
+// Filenames are case-sensitive (matches the files on disk).
 // ============================================================
 import React from 'react';
-import {
-    FaTruck,        // box delivery truck  -> Dry Van
-    FaTruckMoving,  // box / moving van    -> Reefer
-    FaTrailer,      // trailer / deck      -> Stepdeck
-    FaTruckRampBox, // drive-on ramp       -> RGN (lowboy)
-    FaTruckFront,   // cab only            -> Power Only
-} from 'react-icons/fa6';
-import { GiFlatbed } from 'react-icons/gi'; // real flatbed truck -> Flatbed
 
-const ICONS = {
-    'dry-van': FaTruck,
-    reefer: FaTruckMoving,
-    flatbed: GiFlatbed,
-    stepdeck: FaTrailer,
-    rgn: FaTruckRampBox,
-    'power-only': FaTruckFront,
+const FILES = {
+    'dry-van': 'dry_van.svg',
+    reefer: 'reefer.svg',
+    flatbed: 'flat_bed.svg',
+    stepdeck: 'steep_deck.svg',
+    rgn: 'RGN.svg',
+    'power-only': 'power_only.svg',
 };
 
-export default function TrailerIcon({ type, size = 44 }) {
-    const Icon = ICONS[type] || FaTruck;
-    return <Icon size={size} aria-hidden="true" focusable="false" />;
+export default function TrailerIcon({ type, size = 88 }) {
+    const file = FILES[type] || FILES['dry-van'];
+    const url = `/icons/${file}`;
+
+    return (
+        <span
+            className="trailer-icon"
+            aria-hidden="true"
+            style={{
+                width: size,
+                height: size,
+                WebkitMaskImage: `url("${url}")`,
+                maskImage: `url("${url}")`,
+            }}
+        />
+    );
 }

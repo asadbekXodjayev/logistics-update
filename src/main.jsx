@@ -5,13 +5,18 @@ import './index.css'
 import {BrowserRouter} from "react-router-dom";
 import {BlogProvider} from "./Context.jsx";
 import {TrackModalProvider} from "./components/TrackModal/TrackModalContext.jsx";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary.jsx";
 
 createRoot(document.getElementById('root')).render(
-    <BrowserRouter>
-        <BlogProvider>
-            <TrackModalProvider>
-                <App/>
-            </TrackModalProvider>
-        </BlogProvider>
-    </BrowserRouter>,
+    <StrictMode>
+        <BrowserRouter>
+            <ErrorBoundary>
+                <BlogProvider>
+                    <TrackModalProvider>
+                        <App/>
+                    </TrackModalProvider>
+                </BlogProvider>
+            </ErrorBoundary>
+        </BrowserRouter>
+    </StrictMode>,
 )

@@ -137,150 +137,255 @@ const AdminPanel = () => {
         navigate('/login');
     };
 
+    // ── Shared button styling — mirrors the site's two-button system ──
+    const primaryBtnSx = {
+        background: 'var(--color-dark)',
+        color: '#fff',
+        fontFamily: 'var(--font-display)',
+        fontWeight: 700,
+        letterSpacing: '0.06em',
+        textTransform: 'uppercase',
+        borderRadius: '2px',
+        border: '2px solid var(--color-dark)',
+        boxShadow: 'none',
+        px: 2.5,
+        '&:hover': {
+            background: '#fff',
+            color: 'var(--color-dark)',
+            borderColor: 'var(--color-dark)',
+            boxShadow: 'none',
+        },
+    };
+    const onDarkBtnSx = {
+        background: 'transparent',
+        color: '#fff',
+        fontFamily: 'var(--font-display)',
+        fontWeight: 700,
+        letterSpacing: '0.06em',
+        textTransform: 'uppercase',
+        borderRadius: '2px',
+        border: '2px solid rgba(255,255,255,0.45)',
+        '&:hover': {
+            background: '#fff',
+            color: 'var(--color-dark)',
+            borderColor: '#fff',
+        },
+    };
+
     return (
-        <Box sx={{ p: { xs: 2, md: 4 }, background: 'var(--color-highlight)', minHeight: '100vh' }}>
-            <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                justifyContent="space-between"
-                alignItems={{ xs: 'flex-start', sm: 'center' }}
-                spacing={2}
-                sx={{ mb: 3 }}
+        <Box sx={{ background: 'var(--color-light)', minHeight: '100vh', pb: 6 }}>
+            {/* ── Branded header band ───────────────────────────── */}
+            <Box
+                sx={{
+                    background: 'linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-3) 100%)',
+                    borderLeft: '5px solid var(--color-primary)',
+                    px: { xs: 3, md: 6 },
+                    py: { xs: 4, md: 5 },
+                }}
             >
-                <Box>
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontFamily: 'var(--font-display)',
-                            fontWeight: 900,
-                            textTransform: 'uppercase',
-                            color: 'var(--color-dark)',
-                        }}
-                    >
-                        Admin <span style={{ color: 'var(--color-primary)', fontStyle: 'italic' }}>Panel</span>
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'var(--color-mid)' }}>
-                        Manage trucks and fleet inventory.
-                    </Typography>
-                </Box>
-                <Stack direction="row" spacing={1.5}>
-                    <Button
-                        variant="contained"
-                        startIcon={<AddIcon />}
-                        onClick={openCreate}
-                        sx={{
-                            background: 'var(--color-dark)',
-                            color: 'var(--color-primary-dark)',
-                            fontWeight: 700,
-                            '&:hover': { background: 'var(--color-primary-dark)',color: 'var(--color-dark)' },
-                        }}
-                    >
-                        New Truck
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        startIcon={<LogoutIcon />}
-                        onClick={handleLogout}
-                        sx={{
-                            borderColor: 'var(--color-dark)',
-                            color: 'var(--color-dark)',
-                            '&:hover': { borderColor: 'var(--color-primary)', color: 'var(--color-primary)' },
-                        }}
-                    >
+                <Stack
+                    direction={{ xs: 'column', sm: 'row' }}
+                    justifyContent="space-between"
+                    alignItems={{ xs: 'flex-start', sm: 'center' }}
+                    spacing={2}
+                    sx={{ maxWidth: 1280, mx: 'auto', width: '100%' }}
+                >
+                    <Box>
+                        <Typography
+                            sx={{
+                                fontFamily: 'var(--font-display)',
+                                fontWeight: 700,
+                                fontSize: '0.8rem',
+                                letterSpacing: '0.22em',
+                                textTransform: 'uppercase',
+                                color: 'var(--color-primary)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1.5,
+                                mb: 1,
+                            }}
+                        >
+                            <Box component="span" sx={{ width: 26, height: 2, background: 'var(--color-primary)' }} />
+                            Dashboard
+                        </Typography>
+                        <Typography
+                            variant="h4"
+                            sx={{
+                                fontFamily: 'var(--font-display)',
+                                fontWeight: 900,
+                                textTransform: 'uppercase',
+                                color: '#fff',
+                                lineHeight: 1.05,
+                            }}
+                        >
+                            Fleet <span style={{ color: 'var(--color-primary)', fontStyle: 'italic' }}>Manager</span>
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', mt: 0.5 }}>
+                            Add, edit, and remove trucks shown on the public site.
+                        </Typography>
+                    </Box>
+                    <Button startIcon={<LogoutIcon />} onClick={handleLogout} sx={onDarkBtnSx}>
                         Logout
                     </Button>
                 </Stack>
-            </Stack>
+            </Box>
 
-            <Paper sx={{ borderLeft: '5px solid var(--color-primary)' }}>
-                {loading ? (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
-                        <CircularProgress sx={{ color: 'var(--color-primary)' }} />
-                    </Box>
-                ) : (
-                    <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow sx={{ background: 'var(--color-dark)' }}>
-                                    <TableCell sx={{ color: '#fff', fontWeight: 700 }}>Image</TableCell>
-                                    <TableCell sx={{ color: '#fff', fontWeight: 700 }}>Name</TableCell>
-                                    <TableCell sx={{ color: '#fff', fontWeight: 700 }}>Description</TableCell>
-                                    <TableCell sx={{ color: '#fff', fontWeight: 700 }} align="right">
-                                        Actions
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {trucks.length === 0 ? (
-                                    <TableRow>
-                                        <TableCell colSpan={4} align="center" sx={{ py: 4, color: 'var(--color-mid)' }}>
-                                            No trucks yet. Click "New Truck" to add one.
-                                        </TableCell>
-                                    </TableRow>
-                                ) : (
-                                    trucks.map((truck) => (
-                                        <TableRow key={truck._id} hover>
-                                            <TableCell>
-                                                {truck.image ? (
-                                                    <Box
-                                                        component="img"
-                                                        src={truck.image}
-                                                        alt={truck.name}
-                                                        sx={{
-                                                            width: 70,
-                                                            height: 50,
-                                                            objectFit: 'cover',
-                                                            borderRadius: 1,
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <Box
-                                                        sx={{
-                                                            width: 70,
-                                                            height: 50,
-                                                            background: 'var(--color-light)',
-                                                            borderRadius: 1,
-                                                        }}
-                                                    />
-                                                )}
-                                            </TableCell>
-                                            <TableCell sx={{ fontWeight: 600 }}>{truck.name}</TableCell>
+            {/* ── Toolbar: count + new ───────────────────────────── */}
+            <Box sx={{ maxWidth: 1280, mx: 'auto', px: { xs: 3, md: 6 }, mt: { xs: 3, md: 4 } }}>
+                <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    sx={{ mb: 2 }}
+                >
+                    <Typography
+                        sx={{
+                            fontFamily: 'var(--font-display)',
+                            fontWeight: 800,
+                            textTransform: 'uppercase',
+                            color: 'var(--color-dark)',
+                            fontSize: '1.1rem',
+                            letterSpacing: '0.04em',
+                        }}
+                    >
+                        Trucks
+                        <Box
+                            component="span"
+                            sx={{
+                                ml: 1.5, px: 1.2, py: 0.2,
+                                background: 'var(--color-primary)', color: '#fff',
+                                borderRadius: '2px', fontSize: '0.8rem',
+                            }}
+                        >
+                            {trucks.length}
+                        </Box>
+                    </Typography>
+                    <Button startIcon={<AddIcon />} onClick={openCreate} sx={primaryBtnSx}>
+                        New Truck
+                    </Button>
+                </Stack>
+
+                <Paper elevation={0} sx={{ borderLeft: '4px solid var(--color-primary)', border: '1px solid rgba(0,31,63,0.08)' }}>
+                    {loading ? (
+                        <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+                            <CircularProgress sx={{ color: 'var(--color-primary)' }} />
+                        </Box>
+                    ) : (
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow sx={{ background: 'var(--color-dark)' }}>
+                                        {['Image', 'Name', 'Description', 'Actions'].map((h, i) => (
                                             <TableCell
+                                                key={h}
+                                                align={i === 3 ? 'right' : 'left'}
                                                 sx={{
-                                                    maxWidth: 360,
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap',
-                                                    color: 'var(--color-mid)',
+                                                    color: '#fff',
+                                                    fontFamily: 'var(--font-display)',
+                                                    fontWeight: 700,
+                                                    letterSpacing: '0.1em',
+                                                    textTransform: 'uppercase',
+                                                    fontSize: '0.78rem',
+                                                    borderBottom: 'none',
                                                 }}
                                             >
-                                                {truck.description}
+                                                {h}
                                             </TableCell>
-                                            <TableCell align="right">
-                                                <IconButton onClick={() => openEdit(truck)} aria-label="edit">
-                                                    <EditIcon sx={{ color: 'var(--color-dark)' }} />
-                                                </IconButton>
-                                                <IconButton onClick={() => handleDelete(truck)} aria-label="delete">
-                                                    <DeleteIcon sx={{ color: '#c0392b' }} />
-                                                </IconButton>
+                                        ))}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {trucks.length === 0 ? (
+                                        <TableRow>
+                                            <TableCell colSpan={4} align="center" sx={{ py: 6, color: 'var(--color-mid)' }}>
+                                                No trucks yet — click <strong>New Truck</strong> to add the first one.
                                             </TableCell>
                                         </TableRow>
-                                    ))
-                                )}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                )}
-            </Paper>
+                                    ) : (
+                                        trucks.map((truck) => (
+                                            <TableRow
+                                                key={truck._id}
+                                                hover
+                                                sx={{ '&:last-child td': { borderBottom: 0 } }}
+                                            >
+                                                <TableCell>
+                                                    {truck.image ? (
+                                                        <Box
+                                                            component="img"
+                                                            src={truck.image}
+                                                            alt={truck.name}
+                                                            sx={{
+                                                                width: 76, height: 54, objectFit: 'cover',
+                                                                borderRadius: '2px',
+                                                                border: '1px solid rgba(0,31,63,0.1)',
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <Box
+                                                            sx={{
+                                                                width: 76, height: 54,
+                                                                background: 'var(--color-light)',
+                                                                borderRadius: '2px',
+                                                            }}
+                                                        />
+                                                    )}
+                                                </TableCell>
+                                                <TableCell
+                                                    sx={{
+                                                        fontFamily: 'var(--font-display)',
+                                                        fontWeight: 700,
+                                                        textTransform: 'uppercase',
+                                                        color: 'var(--color-dark)',
+                                                    }}
+                                                >
+                                                    {truck.name}
+                                                </TableCell>
+                                                <TableCell
+                                                    sx={{
+                                                        maxWidth: 360,
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap',
+                                                        color: 'var(--text-on-light-muted)',
+                                                    }}
+                                                >
+                                                    {truck.description}
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    <IconButton onClick={() => openEdit(truck)} aria-label="edit" size="small">
+                                                        <EditIcon sx={{ color: 'var(--color-primary)' }} />
+                                                    </IconButton>
+                                                    <IconButton onClick={() => handleDelete(truck)} aria-label="delete" size="small">
+                                                        <DeleteIcon sx={{ color: '#c0392b' }} />
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    )}
+                </Paper>
+            </Box>
 
-            <Dialog open={dialogOpen} onClose={closeDialog} fullWidth maxWidth="sm">
+            <Dialog
+                open={dialogOpen}
+                onClose={closeDialog}
+                fullWidth
+                maxWidth="sm"
+                PaperProps={{ sx: { borderTop: '4px solid var(--color-primary)', borderRadius: '2px' } }}
+            >
                 <DialogTitle
                     sx={{
                         fontFamily: 'var(--font-display)',
-                        fontWeight: 800,
+                        fontWeight: 900,
                         textTransform: 'uppercase',
+                        color: 'var(--color-dark)',
                     }}
                 >
-                    {editingId ? 'Edit Truck' : 'New Truck'}
+                    {editingId ? <>Edit <span style={{ color: 'var(--color-primary)', fontStyle: 'italic' }}>Truck</span></>
+                        : <>New <span style={{ color: 'var(--color-primary)', fontStyle: 'italic' }}>Truck</span></>}
                 </DialogTitle>
                 <DialogContent dividers>
                     <Stack spacing={2} sx={{ mt: 1 }}>
@@ -323,19 +428,19 @@ const AdminPanel = () => {
                     </Stack>
                 </DialogContent>
                 <DialogActions sx={{ p: 2 }}>
-                    <Button onClick={closeDialog} sx={{ color: 'var(--color-mid)' }}>
-                        Cancel
-                    </Button>
                     <Button
-                        onClick={handleSubmit}
-                        variant="contained"
+                        onClick={closeDialog}
                         sx={{
-                            background: 'var(--color-primary)',
-                            color: 'var(--color-dark)',
+                            color: 'var(--color-mid)',
+                            fontFamily: 'var(--font-display)',
                             fontWeight: 700,
-                            '&:hover': { background: 'var(--color-primary-dark)' },
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.06em',
                         }}
                     >
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSubmit} sx={primaryBtnSx}>
                         {editingId ? 'Save Changes' : 'Create Truck'}
                     </Button>
                 </DialogActions>

@@ -8,7 +8,9 @@
 }
 
 .trailers--light {
-    background: var(--color-light);
+    background:
+        radial-gradient(circle at 85% 12%, rgba(0, 123, 255, 0.12), transparent 48%),
+        linear-gradient(180deg, var(--color-light) 0%, rgba(0, 123, 255, 0.08) 100%);
 }
 
 .trailers--dark {
@@ -130,10 +132,25 @@
 .trailer-card__icon {
     color: var(--color-primary);
     margin-bottom: 18px;
+    min-height: 88px;
 }
 
 .trailer-card__icon svg {
     display: block;
+}
+
+/* Masked SVG icon (from public/icons) — tinted with currentColor,
+   mirrored horizontally so the trucks face right. */
+.trailer-icon {
+    display: inline-block;
+    background-color: currentColor;
+    transform: scaleX(-1);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
 }
 
 .trailer-card__title {

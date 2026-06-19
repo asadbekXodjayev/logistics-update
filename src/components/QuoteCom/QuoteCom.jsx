@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { Reveal } from '../Motion/Reveal';
 import { sendTelegramMessage } from '../../lib/telegram';
 import { TRAILER_NAMES } from '../../lib/trailers';
+import { LuCheck, LuX } from 'react-icons/lu';
 import './QuoteCom.css';
 
 const EMPTY = {
@@ -189,7 +190,10 @@ export default function QuoteCom() {
 
                     {status && (
                         <div className={`quote-form__status quote-form__status--${status}`} role="status">
-                            {status === 'success' ? '✓ ' : '✕ '}{statusMsg}
+                            {status === 'success'
+                                ? <LuCheck size={16} style={{ verticalAlign: '-3px', marginRight: 6 }} />
+                                : <LuX size={16} style={{ verticalAlign: '-3px', marginRight: 6 }} />}
+                            {statusMsg}
                         </div>
                     )}
 

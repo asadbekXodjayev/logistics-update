@@ -6,6 +6,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { sendTelegramMessage } from '../../lib/telegram';
+import { LuCheck, LuX } from 'react-icons/lu';
 import './TrackModal.css';
 
 const EMPTY = { load: '', company: '', phone: '', email: '' };
@@ -168,7 +169,10 @@ export default function TrackModal({ open, onClose }) {
 
                             {status && (
                                 <div className={`track-modal__status track-modal__status--${status}`} role="status">
-                                    {status === 'success' ? '✓ ' : '✕ '}{statusMsg}
+                                    {status === 'success'
+                                        ? <LuCheck size={16} style={{ verticalAlign: '-3px', marginRight: 6 }} />
+                                        : <LuX size={16} style={{ verticalAlign: '-3px', marginRight: 6 }} />}
+                                    {statusMsg}
                                 </div>
                             )}
 

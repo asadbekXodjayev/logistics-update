@@ -10,8 +10,8 @@ import {
 } from '@mui/material';
 
 // Locally defined credentials
-const ADMIN_LOGIN = 'moglobeadmin';
-const ADMIN_PASSWORD = 'adminmoglobe';
+const ADMIN_LOGIN = 'logistics@admin.com';
+const ADMIN_PASSWORD = 'Logistics123@#';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -87,7 +87,8 @@ const Login = () => {
 
                 <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <TextField
-                        label="Username"
+                        label="Email"
+                        type="email"
                         variant="outlined"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
@@ -111,7 +112,7 @@ const Login = () => {
                             color: '#fff', // Changed to white for better contrast on the new blue primary
                             fontWeight: 700,
                             letterSpacing: 1,
-                            '&:hover': { background: 'var(--color-primary-dark)' },
+                            '&:hover': { background: 'var(--color-dark)' },
                         }}
                     >
                         Sign In
