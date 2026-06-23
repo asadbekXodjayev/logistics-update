@@ -1,8 +1,10 @@
 import React from 'react';
+import { formatDateUS, formatDateBadge } from '../../lib/date';
 import './NewsComponent.css';
 
 const NewsComponent = ({ el }) => {
-    const date = el?.createdAt ? el.createdAt.slice(0, 10) : '';
+    const dateUS = formatDateUS(el?.createdAt);
+    const badge = formatDateBadge(el?.createdAt);
 
     return (
         <article className="nws-card">
@@ -14,10 +16,10 @@ const NewsComponent = ({ el }) => {
                 )}
                 <div className="nws-card__media-grad" />
                 <span className="nws-card__tag">Fleet</span>
-                {date && (
+                {badge && (
                     <div className="nws-card__date">
-                        <span className="nws-card__date-day">{date.slice(8, 10)}</span>
-                        <span className="nws-card__date-month">{date.slice(0, 7)}</span>
+                        <span className="nws-card__date-day">{badge.day}</span>
+                        <span className="nws-card__date-month">{badge.month}</span>
                     </div>
                 )}
             </div>
@@ -26,10 +28,10 @@ const NewsComponent = ({ el }) => {
                 <h3 className="nws-card__title">{el?.name}</h3>
                 <span className="nws-card__bar" />
                 <p className="nws-card__desc">{el?.description}</p>
-                {date && (
+                {dateUS && (
                     <p className="nws-card__meta">
                         <span className="nws-card__meta-dot" />
-                        Added {date}
+                        Added {dateUS}
                     </p>
                 )}
             </div>

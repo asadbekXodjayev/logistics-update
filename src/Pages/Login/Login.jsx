@@ -8,10 +8,7 @@ import {
     Typography,
     Alert,
 } from '@mui/material';
-
-// Locally defined credentials
-const ADMIN_LOGIN = 'logistics@admin.com';
-const ADMIN_PASSWORD = 'Logistics123@#';
+import { ADMIN_LOGIN, ADMIN_PASSWORD, AUTH_TOKEN } from '../../lib/auth';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -30,11 +27,10 @@ const Login = () => {
             return;
         }
 
-        // Logic to check against local constants
+        // Validate against credentials sourced from env
         if (username === ADMIN_LOGIN && password === ADMIN_PASSWORD) {
-            // Generate a token that matches the ProtectedRoute logic
-            const token = btoa(`${ADMIN_LOGIN}:${ADMIN_PASSWORD}`);
-            localStorage.setItem('token', token);
+            // Store the token ProtectedRoute checks for
+            localStorage.setItem('token', AUTH_TOKEN);
 
             setError('');
             navigate(from, { replace: true });
